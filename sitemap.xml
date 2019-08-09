@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://tjliuyu.com/2019/01/04/Hexo-Github-Pages-setupblog/</loc>
+    
+    <lastmod>2019-08-09T12:11:10.893Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://tjliuyu.com/2019/01/30/Japan-travel/</loc>
     
     <lastmod>2019-04-09T11:58:10.698Z</lastmod>
@@ -33,13 +40,6 @@
     <loc>http://tjliuyu.com/2019/02/03/Hexo-Hueman-Valine-Comment-system/</loc>
     
     <lastmod>2019-02-03T15:45:47.039Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://tjliuyu.com/2019/01/04/Hexo-Github-Pages-setupblog/</loc>
-    
-    <lastmod>2019-02-03T08:40:32.331Z</lastmod>
     
   </url>
   
