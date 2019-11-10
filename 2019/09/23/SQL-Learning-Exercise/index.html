@@ -23,7 +23,7 @@
 <meta property="og:description" content="基于MYSQL 8.0.17执行SQL命令。其中BETWEEN用于查询确定范围的值（数字、文本或日期），运算区间是闭区间（包括上限和下限）。 1234567-- DOS界面进入mysqlmysql -u root -p-- 查看版本mysql&amp;gt; SELECT VERSION(); 练习1建立表结构：STUDENT学生表, COURSE课程表, SCORE成绩表, TEACHER教师表 12">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://tjliuyu.com/2019/09/23/SQL-Learning-Exercise/logo.jpg">
-<meta property="og:updated_time" content="2019-11-01T16:10:10.314Z">
+<meta property="og:updated_time" content="2019-11-10T06:39:09.275Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SQL-Learning-Exercise">
 <meta name="twitter:description" content="基于MYSQL 8.0.17执行SQL命令。其中BETWEEN用于查询确定范围的值（数字、文本或日期），运算区间是闭区间（包括上限和下限）。 1234567-- DOS界面进入mysqlmysql -u root -p-- 查看版本mysql&amp;gt; SELECT VERSION(); 练习1建立表结构：STUDENT学生表, COURSE课程表, SCORE成绩表, TEACHER教师表 12">
@@ -263,9 +263,65 @@
 <td style="text-align:center">17、查询“95033”班所选课程的平均分。</td>
 <td style="text-align:center">SELECT AVG(DEGREE) FROM STUDENT A JOIN SCORE B ON A.SNO = B.SNO WHERE A.CLASS = ‘95031’;</td>
 </tr>
+<tr>
+<td style="text-align:center">18、假设使用如下命令建立了一个grade表：create table grade(low numeric(3,0),upp numeric(3,0),ranking char(1)); insert into grade values(90,100,’A’); insert into grade values(80,89,’B’); insert into grade values(70,79,’C’); insert into grade values(60,69,’D’); insert into grade values(0,59,’E’); 现查询所有同学的Sno、Cno和ranking列。</td>
+<td style="text-align:center">SELECT A.SNO, A.CNO, B.RANKING FROM SCORE A JOIN GRADE B ON A.DEGREE BETWEEN B.LOW AND B.UPP;</td>
+</tr>
+<tr>
+<td style="text-align:center">19、查询选修“3-105”课程的成绩高于“109”号同学成绩的所有同学的记录。</td>
+<td style="text-align:center">SELECT * FROM SCORE WHERE CNO = ‘3-105’ AND DEGREE &gt; (SELECT DEGREE FROM SCORE WHERE CNO = ‘3-105’ AND SNO = ‘109’);</td>
+</tr>
+<tr>
+<td style="text-align:center">20、查询score中选学一门以上课程的同学中分数为非最高分成绩的记录。</td>
+<td style="text-align:center">SELECT * FROM SCORE WHERE DEGREE NOT IN (SELECT MAX(DEGREE) FROM SCORE) AND SNO IN (SELECT SNO FROM SCORE GROUP BY SNO HAVING COUNT(SNO) &gt; 1);</td>
+</tr>
+<tr>
+<td style="text-align:center">21、查询成绩高于学号为“109”、课程号为“3-105”的成绩的所有记录。</td>
+<td style="text-align:center">SELECT * FROM SCORE WHERE SNO = ‘109’ AND CNO = ‘3-105’;</td>
+</tr>
+<tr>
+<td style="text-align:center">22、查询和学号为108的同学同年出生的所有学生的Sno、Sname和Sbirthday列。</td>
+<td style="text-align:center">SELECT SNO, SNAME, SBIRTHDAY FROM STUDENT WHERE YEAR(SBIRTHDAY) = (SELECT YEAR(SBIRTHDAY) FROM STUDENT WHERE SNO = ‘108’);</td>
+</tr>
+<tr>
+<td style="text-align:center">23、查询“张旭“教师任课的学生成绩。</td>
+<td style="text-align:center">SELECT SNO, DEGREE FROM SCORE WHERE CNO IN (SELECT CNO FROM COURSE A JOIN TEACHER B ON A.TNO = B.TNO WHERE B.TNAME = ‘张旭’);</td>
+</tr>
+<tr>
+<td style="text-align:center">24、查询选修某课程的同学人数多于5人的教师姓名。</td>
+<td style="text-align:center">SELECT TNAME FROM TEACHER A JOIN (COURSE B, SCORE C) ON (A.TNO = B.TNO AND B.CNO = C.CNO) GROUP BY TNAME HAVING COUNT(SNO) &gt; 5;</td>
+</tr>
+<tr>
+<td style="text-align:center">25、查询95033班和95031班全体学生的记录。</td>
+<td style="text-align:center">SELECT * FROM STUDENT WHERE CLASS IN (‘95033’, ‘95031’);</td>
+</tr>
+<tr>
+<td style="text-align:center">26、查询存在有85分以上成绩的课程Cno。</td>
+<td style="text-align:center">SELECT DISTINCT CNO FROM SCORE WHERE DEGREE &gt; 85;</td>
+</tr>
+<tr>
+<td style="text-align:center">27、查询出“计算机系”教师所教课程的成绩表。</td>
+<td style="text-align:center">SELECT A.<em> FROM SCORE A JOIN (COURSE B, TEACHER C) ON A.CNO = B.CNO AND B.TNO = C.TNO WHERE C.DEPART = ‘计算机系’;/SELECT </em> FROM SCORE WHERE CNO IN (SELECT A.CNO FROM COURSE A JOIN TEACHER B ON A.TNO = B.TNO WHERE B.DEPART = ‘计算机系’);</td>
+</tr>
+<tr>
+<td style="text-align:center">28、查询“计算机系”与“电子工程系”不同职称的教师的Tname和Prof。</td>
+<td style="text-align:center">SELECT TNAME, PROF FROM TEACHER WHERE DEPART = ‘计算机系’ AND PROF NOT IN (SELECT PROF FROM TEACHER WHERE DEPART = ‘电子工程系’);</td>
+</tr>
+<tr>
+<td style="text-align:center">29、查询选修编号为“3-105“课程且成绩至少高于选修编号为“3-245”的同学的Cno、Sno和Degree,并按Degree从高到低次序排序。</td>
+<td style="text-align:center">SELECT * FROM SCORE WHERE CNO = ‘3-105’ AND DEGREE &gt; ANY(SELECT DEGREE FROM SCORE WHERE CNO = ‘3-245’) ORDER BY DEGREE DESC; </td>
+</tr>
+<tr>
+<td style="text-align:center">30、查询选修编号为“3-105”且成绩高于所有选修编号为“3-245”课程的同学的Cno、Sno和Degree,并按Degree从高到低次序排序。</td>
+<td style="text-align:center">SELECT * FROM SCORE WHERE CNO = ‘3-105’ AND DEGREE &gt; ALL(SELECT DEGREE FROM SCORE WHERE CNO = ‘3-245’) ORDER BY DEGREE DESC; </td>
+</tr>
+<tr>
+<td style="text-align:center">31、查询所有教师和同学的name、sex和birthday。</td>
+<td style="text-align:center">SELECT SNAME AS NAME, SSEX AS SEX, SBIRTHDAY AS BIRTHDAY FROM STUDENT</td>
+</tr>
 </tbody>
 </table>
-<p>18、假设使用如下命令建立了一个grade表：create table grade(low numeric(3,0),upp numeric(3,0),ranking char(1)); insert into grade values(90,100,’A’); insert into grade values(80,89,’B’); insert into grade values(70,79,’C’);<br>insert into grade values(60,69,’D’); insert into grade values(0,59,’E’); 现查询所有同学的Sno、Cno和ranking列。 | SELECT A.SNO, A.CNO, B.RANKING FROM SCORE A JOIN GRADE B ON A.DEGREE BETWEEN B.LOW AND B.UPP;<br>19、查询选修“3-105”课程的成绩高于“109”号同学成绩的所有同学的记录。 | SELECT <em> FROM SCORE WHERE CNO = ‘3-105’ AND DEGREE &gt; (SELECT DEGREE FROM SCORE WHERE CNO = ‘3-105’ AND SNO = ‘109’);<br>20、查询score中选学一门以上课程的同学中分数为非最高分成绩的记录。 | SELECT </em> FROM SCORE WHERE DEGREE NOT IN (SELECT MAX(DEGREE) FROM SCORE) AND SNO IN (SELECT SNO FROM SCORE GROUP BY SNO HAVING COUNT(SNO) &gt; 1);<br>21、查询成绩高于学号为“109”、课程号为“3-105”的成绩的所有记录。 | SELECT <em> FROM SCORE WHERE SNO = ‘109’ AND CNO = ‘3-105’;<br>22、查询和学号为108的同学同年出生的所有学生的Sno、Sname和Sbirthday列。 | SELECT SNO, SNAME, SBIRTHDAY FROM STUDENT WHERE YEAR(SBIRTHDAY) = (SELECT YEAR(SBIRTHDAY) FROM STUDENT WHERE SNO = ‘108’);<br>23、查询“张旭“教师任课的学生成绩。 | SELECT SNO, DEGREE FROM SCORE WHERE CNO IN (SELECT CNO FROM COURSE A JOIN TEACHER B ON A.TNO = B.TNO WHERE B.TNAME = ‘张旭’);<br>24、查询选修某课程的同学人数多于5人的教师姓名。 | SELECT TNAME FROM TEACHER A JOIN (COURSE B, SCORE C) ON (A.TNO = B.TNO AND B.CNO = C.CNO) GROUP BY TNAME HAVING COUNT(SNO) &gt; 5;<br>25、查询95033班和95031班全体学生的记录。 | SELECT </em> FROM STUDENT WHERE CLASS IN (‘95033’, ‘95031’);<br>26、查询存在有85分以上成绩的课程Cno。 | SELECT DISTINCT CNO FROM SCORE WHERE DEGREE &gt; 85;<br>27、查询出“计算机系”教师所教课程的成绩表。 | SELECT A.<em> FROM SCORE A JOIN (COURSE B, TEACHER C) ON A.CNO = B.CNO AND B.TNO = C.TNO WHERE C.DEPART = ‘计算机系’;/SELECT </em> FROM SCORE WHERE CNO IN (SELECT A.CNO FROM COURSE A JOIN TEACHER B ON A.TNO = B.TNO WHERE B.DEPART = ‘计算机系’);<br>28、查询“计算机系”与“电子工程系”不同职称的教师的Tname和Prof。 | SELECT TNAME, PROF FROM TEACHER WHERE DEPART = ‘计算机系’ AND PROF NOT IN (SELECT PROF FROM TEACHER WHERE DEPART = ‘电子工程系’);<br>29、查询选修编号为“3-105“课程且成绩至少高于选修编号为“3-245”的同学的Cno、Sno和Degree,并按Degree从高到低次序排序。 | SELECT <em> FROM SCORE WHERE CNO = ‘3-105’ AND DEGREE &gt; ANY(SELECT DEGREE FROM SCORE WHERE CNO = ‘3-245’) ORDER BY DEGREE DESC;<br>30、查询选修编号为“3-105”且成绩高于所有选修编号为“3-245”课程的同学的Cno、Sno和Degree,并按Degree从高到低次序排序。 | SELECT </em> FROM SCORE WHERE CNO = ‘3-105’ AND DEGREE &gt; ALL(SELECT DEGREE FROM SCORE WHERE CNO = ‘3-245’) ORDER BY DEGREE DESC;<br>31、查询所有教师和同学的name、sex和birthday。 | SELECT SNAME AS NAME, SSEX AS SEX, SBIRTHDAY AS BIRTHDAY FROM STUDENT<br>UNION<br>SELECT TNAME AS NAME, TSEX AS SEX, TBIRTHDAY AS BIRTHDAY FROM TEACHER;<br>32、查询所有“女”教师和“女”同学的name、sex和birthday。 | SELECT SNAME AS NAME, SSEX AS SEX, SBIRTHDAY AS BIRTHDAY FROM STUDENT WHERE SSEX = ‘女’<br>UNION<br>SELECT TNAME AS NAME, TSEX AS SEX, TBIRTHDAY AS BIRTHDAY FROM TEACHER WHERE TSEX = ‘女’;<br>33、查询成绩比该课程平均成绩低的同学的成绩表。 | SELECT A.<em> FROM SCORE A WHERE DEGREE &lt; (SELECT AVG(DEGREE) FROM SCORE B WHERE A.CNO = B.CNO);<br>34、查询所有任课教师的Tname和Depart。 | SELECT TNAME, DEPART FROM TEACHER A JOIN COURSE B ON A.TNO = B.TNO;/SELECT TNAME, DEPART FROM TEACHER WHERE TNO IN (SELECT TNO FROM COURSE);<br>35  查询所有未讲课的教师的Tname和Depart。 | SELECT TNAME, DEPART FROM TEACHER A LEFT JOIN COURSE B USING(TNO) WHERE ISNULL(B.TNO);/SELECT TNAME, DEPART FROM TEACHER WHERE TNO NOT IN (SELECT TNO FROM COURSE);<br>36、查询至少有2名男生的班号。 | SELECT CLASS FROM STUDENT WHERE SSEX = ‘男’ GROUP BY CLASS HAVING COUNT(</em>) &gt;= 2;<br>37、查询Student表中不姓“王”的同学记录。 | SELECT <em> FROM STUDENT WHERE SNAME NOT LIKE ‘王%’;<br>38、查询Student表中每个学生的姓名和年龄。 | SELECT SNAME, YEAR(NOW())-YEAR(SBIRTHDAY) AS AGE FROM STUDENT;<br>39、查询Student表中最大和最小的Sbirthday日期值。 | SELECT MAX(SBIRTHDAY), MIN(SBIRTHDAY) FROM STUDENT;<br>40、以班号和年龄从大到小的顺序查询Student表中的全部记录。 | SELECT </em> FROM STUDENT ORDER BY CLASS DESC, SBIRTHDAY ASC;<br>41、查询“男”教师及其所上的课程。 | SELECT CNAME FROM COURSE A JOIN TEACHER B ON A.TNO = B.TNO WHERE B.TSEX = ‘男’;<br>42、查询最高分同学的Sno、Cno和Degree列。 | SELECT SNO, CNO, DEGREE FROM SCORE WHERE DEGREE = (SELECT MAX(DEGREE) FROM SCORE);<br>43、查询和“李军”同性别的所有同学的Sname。 | SELECT SNAME FROM STUDENT WHERE SSEX = (SELECT SSEX FROM STUDENT WHERE SNAME = ‘李军’);<br>44、查询和“李军”同性别并同班的同学Sname。 | SELECT SNAME FROM STUDENT A JOIN (SELECT SSEX, CLASS FROM STUDENT WHERE SNAME = ‘李军’) B ON A.SSEX = B.SSEX AND A.CLASS = B.CLASS;<br>45、查询所有选修“计算机导论”课程的“男”同学的成绩表。 | SELECT A.* FROM SCORE A JOIN STUDENT B ON A.SNO = B.SNO WHERE CNO = (SELECT CNO FROM COURSE WHERE CNAME = ‘计算机导论’) AND SSEX = ‘男’;</p>
+<p>UNION<br>SELECT TNAME AS NAME, TSEX AS SEX, TBIRTHDAY AS BIRTHDAY FROM TEACHER;<br>32、查询所有“女”教师和“女”同学的name、sex和birthday。 | SELECT SNAME AS NAME, SSEX AS SEX, SBIRTHDAY AS BIRTHDAY FROM STUDENT WHERE SSEX = ‘女’ UNION SELECT TNAME AS NAME, TSEX AS SEX, TBIRTHDAY AS BIRTHDAY FROM TEACHER WHERE TSEX = ‘女’;<br>33、查询成绩比该课程平均成绩低的同学的成绩表。 | SELECT A.<em> FROM SCORE A WHERE DEGREE &lt; (SELECT AVG(DEGREE) FROM SCORE B WHERE A.CNO = B.CNO);<br>34、查询所有任课教师的Tname和Depart。 | SELECT TNAME, DEPART FROM TEACHER A JOIN COURSE B ON A.TNO = B.TNO;/SELECT TNAME, DEPART FROM TEACHER WHERE TNO IN (SELECT TNO FROM COURSE);<br>35  查询所有未讲课的教师的Tname和Depart。 | SELECT TNAME, DEPART FROM TEACHER A LEFT JOIN COURSE B USING(TNO) WHERE ISNULL(B.TNO);/SELECT TNAME, DEPART FROM TEACHER WHERE TNO NOT IN (SELECT TNO FROM COURSE);<br>36、查询至少有2名男生的班号。 | SELECT CLASS FROM STUDENT WHERE SSEX = ‘男’ GROUP BY CLASS HAVING COUNT(</em>) &gt;= 2;<br>37、查询Student表中不姓“王”的同学记录。 | SELECT <em> FROM STUDENT WHERE SNAME NOT LIKE ‘王%’;<br>38、查询Student表中每个学生的姓名和年龄。 | SELECT SNAME, YEAR(NOW())-YEAR(SBIRTHDAY) AS AGE FROM STUDENT;<br>39、查询Student表中最大和最小的Sbirthday日期值。 | SELECT MAX(SBIRTHDAY), MIN(SBIRTHDAY) FROM STUDENT;<br>40、以班号和年龄从大到小的顺序查询Student表中的全部记录。 | SELECT </em> FROM STUDENT ORDER BY CLASS DESC, SBIRTHDAY ASC;<br>41、查询“男”教师及其所上的课程。 | SELECT CNAME FROM COURSE A JOIN TEACHER B ON A.TNO = B.TNO WHERE B.TSEX = ‘男’;<br>42、查询最高分同学的Sno、Cno和Degree列。 | SELECT SNO, CNO, DEGREE FROM SCORE WHERE DEGREE = (SELECT MAX(DEGREE) FROM SCORE);<br>43、查询和“李军”同性别的所有同学的Sname。 | SELECT SNAME FROM STUDENT WHERE SSEX = (SELECT SSEX FROM STUDENT WHERE SNAME = ‘李军’);<br>44、查询和“李军”同性别并同班的同学Sname。 | SELECT SNAME FROM STUDENT A JOIN (SELECT SSEX, CLASS FROM STUDENT WHERE SNAME = ‘李军’) B ON A.SSEX = B.SSEX AND A.CLASS = B.CLASS;<br>45、查询所有选修“计算机导论”课程的“男”同学的成绩表。 | SELECT A.* FROM SCORE A JOIN STUDENT B ON A.SNO = B.SNO WHERE CNO = (SELECT CNO FROM COURSE WHERE CNAME = ‘计算机导论’) AND SSEX = ‘男’;</p>
 <p><strong>reference</strong></p>
 <p><a href="https://www.zhihu.com/question/19552975" target="_blank" rel="noopener">知乎SQL学习</a></p>
 
@@ -275,7 +331,7 @@
 
 
 
-    <a data-url="http://tjliuyu.com/2019/09/23/SQL-Learning-Exercise/" data-id="ck2gbnsmi0018igupn8wnlkpc" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
+    <a data-url="http://tjliuyu.com/2019/09/23/SQL-Learning-Exercise/" data-id="ck2smo8w1001168upb3qsc7ra" class="article-share-link"><i class="fa fa-share"></i>分享到</a>
 <script>
     (function ($) {
         $('body').on('click', function() {
@@ -351,14 +407,14 @@
         "genre": "",
         "datePublished": "2019-09-23",
         "dateCreated": "2019-09-23",
-        "dateModified": "2019-11-02",
+        "dateModified": "2019-11-10",
         "url": "http://tjliuyu.com/2019/09/23/SQL-Learning-Exercise/",
         "description": "
 基于MYSQL 8.0.17执行SQL命令。其中BETWEEN用于查询确定范围的值（数字、文本或日期），运算区间是闭区间（包括上限和下限）。
 1234567-- DOS界面进入mysqlmysql -u root -p-- 查看版本mysql&gt; SELECT VERSION();
 练习1建立表结构：STUDENT学生表, COURSE课程表, SCORE成绩表, TEACHER教师表
 12"
-        "wordCount": 1142
+        "wordCount": 1147
     }
 </script>
 
