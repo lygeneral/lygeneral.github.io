@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@5.15.4/css/all.min.css" integrity="sha256-mUZM63G8m73Mcidfrv5E+Y61y7a12O5mW4ezU3bxqW4=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"lygeneral.github.io","root":"/","images":"/images","scheme":"Muse","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<meta name="description" content="基于MYSQL 8.0.17执行SQL命令。其中BETWEEN用于查询确定范围的值（数字、文本或日期），运算区间是闭区间（包括上限和下限）。 1234567-- DOS界面进入mysqlmysql -u root -p-- 查看版本mysql&gt; SELECT VERSION();  练习1建立表结构：STUDENT学生表, COURSE课程表, SCORE成绩表, TEACHER教师表 1">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SQL-Learning-Exercise">
+<meta property="og:url" content="https://lygeneral.github.io/2019/09/23/SQL-Learning-Exercise/index.html">
+<meta property="og:site_name" content="tjliu的博客">
+<meta property="og:description" content="基于MYSQL 8.0.17执行SQL命令。其中BETWEEN用于查询确定范围的值（数字、文本或日期），运算区间是闭区间（包括上限和下限）。 1234567-- DOS界面进入mysqlmysql -u root -p-- 查看版本mysql&gt; SELECT VERSION();  练习1建立表结构：STUDENT学生表, COURSE课程表, SCORE成绩表, TEACHER教师表 1">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://lygeneral.github.io/SQL-Learning-Exercise/logo.jpg">
+<meta property="article:published_time" content="2019-09-23T15:17:25.000Z">
+<meta property="article:modified_time" content="2019-11-10T06:39:09.275Z">
+<meta property="article:author" content="tjliu">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://lygeneral.github.io/SQL-Learning-Exercise/logo.jpg">
+
+
+<link rel="canonical" href="https://lygeneral.github.io/2019/09/23/SQL-Learning-Exercise/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://lygeneral.github.io/2019/09/23/SQL-Learning-Exercise/","path":"2019/09/23/SQL-Learning-Exercise/","title":"SQL-Learning-Exercise"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>SQL-Learning-Exercise | tjliu的博客</title>
+  
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">tjliu的博客</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">你害怕跌倒，你跌倒，因为你害怕</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BB%83%E4%B9%A01"><span class="nav-number">1.</span> <span class="nav-text">练习1</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%BB%BA%E7%AB%8B%E8%A1%A8%E7%BB%93%E6%9E%84%EF%BC%9A"><span class="nav-number">1.1.</span> <span class="nav-text">建立表结构：</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">tjliu</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://lygeneral.github.io/2019/09/23/SQL-Learning-Exercise/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="tjliu">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tjliu的博客">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          SQL-Learning-Exercise
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-09-23 23:17:25" itemprop="dateCreated datePublished" datetime="2019-09-23T23:17:25+08:00">2019-09-23</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2019-11-10 14:39:09" itemprop="dateModified" datetime="2019-11-10T14:39:09+08:00">2019-11-10</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p><img src="/SQL-Learning-Exercise/logo.jpg"></p>
+<p>基于MYSQL 8.0.17执行SQL命令。其中BETWEEN用于查询确定范围的值（数字、文本或日期），运算区间是闭区间（包括上限和下限）。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-- DOS界面进入mysql</span><br><span class="line"></span><br><span class="line">mysql -u root -p</span><br><span class="line"></span><br><span class="line">-- 查看版本</span><br><span class="line"></span><br><span class="line">mysql&gt; SELECT VERSION();</span><br></pre></td></tr></table></figure>
+
+<h2 id="练习1"><a href="#练习1" class="headerlink" title="练习1"></a>练习1</h2><h3 id="建立表结构："><a href="#建立表结构：" class="headerlink" title="建立表结构："></a>建立表结构：</h3><p><strong>STUDENT学生表, COURSE课程表, SCORE成绩表, TEACHER教师表</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE STUDENT</span><br><span class="line">(SNO VARCHAR(3) NOT NULL,</span><br><span class="line">SNAME VARCHAR(4) NOT NULL,</span><br><span class="line">SSEX VARCHAR(2) NOT NULL,</span><br><span class="line">SBIRTHDAY DATETIME,</span><br><span class="line">CLASS VARCHAR(5));</span><br><span class="line"></span><br><span class="line">CREATE TABLE COURSE</span><br><span class="line">(CNO VARCHAR(5) NOT NULL,</span><br><span class="line">CNAME VARCHAR(10) NOT NULL,</span><br><span class="line">TNO VARCHAR(10) NOT NULL);</span><br><span class="line"></span><br><span class="line">CREATE TABLE SCORE</span><br><span class="line">(SNO VARCHAR(3) NOT NULL,</span><br><span class="line">CNO VARCHAR(5) NOT NULL,</span><br><span class="line">DEGREE NUMERIC(10, 1) NOT NULL);</span><br><span class="line"></span><br><span class="line">CREATE TABLE TEACHER</span><br><span class="line">(TNO VARCHAR(3) NOT NULL,</span><br><span class="line">TNAME VARCHAR(4) NOT NULL,</span><br><span class="line">TSEX VARCHAR(2) NOT NULL,</span><br><span class="line">TBIRTHDAY DATETIME NOT NULL,</span><br><span class="line">PROF VARCHAR(6),</span><br><span class="line">DEPART VARCHAR(10) NOT NULL);</span><br><span class="line"></span><br><span class="line">INSERT INTO STUDENT (SNO,SNAME,SSEX,SBIRTHDAY,CLASS) VALUES (108 ,&#x27;曾华&#x27;</span><br><span class="line">,&#x27;男&#x27; ,&#x27;1977-09-01&#x27;,95033);</span><br><span class="line">INSERT INTO STUDENT (SNO,SNAME,SSEX,SBIRTHDAY,CLASS) VALUES (105 ,&#x27;匡明&#x27;</span><br><span class="line">,&#x27;男&#x27; ,&#x27;1975-10-02&#x27;,95031);</span><br><span class="line">INSERT INTO STUDENT (SNO,SNAME,SSEX,SBIRTHDAY,CLASS) VALUES (107 ,&#x27;王丽&#x27;</span><br><span class="line">,&#x27;女&#x27; ,&#x27;1976-01-23&#x27;,95033);</span><br><span class="line">INSERT INTO STUDENT (SNO,SNAME,SSEX,SBIRTHDAY,CLASS) VALUES (101 ,&#x27;李军&#x27;</span><br><span class="line">,&#x27;男&#x27; ,&#x27;1976-02-20&#x27;,95033);</span><br><span class="line">INSERT INTO STUDENT (SNO,SNAME,SSEX,SBIRTHDAY,CLASS) VALUES (109 ,&#x27;王芳&#x27;</span><br><span class="line">,&#x27;女&#x27; ,&#x27;1975-02-10&#x27;,95031);</span><br><span class="line">INSERT INTO STUDENT (SNO,SNAME,SSEX,SBIRTHDAY,CLASS) VALUES (103 ,&#x27;陆君&#x27;</span><br><span class="line">,&#x27;男&#x27; ,&#x27;1974-06-03&#x27;,95031);</span><br><span class="line"></span><br><span class="line">INSERT INTO COURSE(CNO,CNAME,TNO)VALUES (&#x27;3-105&#x27; ,&#x27;计算机导论&#x27;,825);</span><br><span class="line">INSERT INTO COURSE(CNO,CNAME,TNO)VALUES (&#x27;3-245&#x27; ,&#x27;操作系统&#x27; ,804);</span><br><span class="line">INSERT INTO COURSE(CNO,CNAME,TNO)VALUES (&#x27;6-166&#x27; ,&#x27;数据电路&#x27; ,856);</span><br><span class="line">INSERT INTO COURSE(CNO,CNAME,TNO)VALUES (&#x27;9-888&#x27; ,&#x27;高等数学&#x27; ,100);</span><br><span class="line"></span><br><span class="line">INSERT INTO SCORE(SNO,CNO,DEGREE)VALUES (103,&#x27;3-245&#x27;,86);</span><br><span class="line">INSERT INTO SCORE(SNO,CNO,DEGREE)VALUES (105,&#x27;3-245&#x27;,75);</span><br><span class="line">INSERT INTO SCORE(SNO,CNO,DEGREE)VALUES (109,&#x27;3-245&#x27;,68);</span><br><span class="line">INSERT INTO SCORE(SNO,CNO,DEGREE)VALUES (103,&#x27;3-105&#x27;,92);</span><br><span class="line">INSERT INTO SCORE(SNO,CNO,DEGREE)VALUES (105,&#x27;3-105&#x27;,88);</span><br><span class="line">INSERT INTO SCORE(SNO,CNO,DEGREE)VALUES (109,&#x27;3-105&#x27;,76);</span><br><span class="line">INSERT INTO SCORE(SNO,CNO,DEGREE)VALUES (101,&#x27;3-105&#x27;,64);</span><br><span class="line">INSERT INTO SCORE(SNO,CNO,DEGREE)VALUES (107,&#x27;3-105&#x27;,91);</span><br><span class="line">INSERT INTO SCORE(SNO,CNO,DEGREE)VALUES (108,&#x27;3-105&#x27;,78);</span><br><span class="line">INSERT INTO SCORE(SNO,CNO,DEGREE)VALUES (101,&#x27;6-166&#x27;,85);</span><br><span class="line">INSERT INTO SCORE(SNO,CNO,DEGREE)VALUES (107,&#x27;6-106&#x27;,79);</span><br><span class="line">INSERT INTO SCORE(SNO,CNO,DEGREE)VALUES (108,&#x27;6-166&#x27;,81);</span><br><span class="line"></span><br><span class="line">INSERT INTO TEACHER(TNO,TNAME,TSEX,TBIRTHDAY,PROF,DEPART)</span><br><span class="line">VALUES (804,&#x27;李诚&#x27;,&#x27;男&#x27;,&#x27;1958-12-02&#x27;,&#x27;副教授&#x27;,&#x27;计算机系&#x27;);</span><br><span class="line">INSERT INTO TEACHER(TNO,TNAME,TSEX,TBIRTHDAY,PROF,DEPART)</span><br><span class="line">VALUES (856,&#x27;张旭&#x27;,&#x27;男&#x27;,&#x27;1969-03-12&#x27;,&#x27;讲师&#x27;,&#x27;电子工程系&#x27;);</span><br><span class="line">INSERT INTO TEACHER(TNO,TNAME,TSEX,TBIRTHDAY,PROF,DEPART)</span><br><span class="line">VALUES (825,&#x27;王萍&#x27;,&#x27;女&#x27;,&#x27;1972-05-05&#x27;,&#x27;助教&#x27;,&#x27;计算机系&#x27;);</span><br><span class="line">INSERT INTO TEACHER(TNO,TNAME,TSEX,TBIRTHDAY,PROF,DEPART)</span><br><span class="line">VALUES (831,&#x27;刘冰&#x27;,&#x27;女&#x27;,&#x27;1977-08-14&#x27;,&#x27;助教&#x27;,&#x27;电子工程系&#x27;); </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<table>
+<thead>
+<tr>
+<th align="center">题目</th>
+<th align="center">SQL语句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="center">1、 查询Student表中的所有记录的Sname、Ssex和Class列。</td>
+<td align="center">SELECT SNAME, SSEX, CLASS FROM STUDENT;</td>
+</tr>
+<tr>
+<td align="center">2、 查询教师所有的单位即不重复的Depart列。</td>
+<td align="center">SELECT DISTINCT DEPART FROM TEACHER;</td>
+</tr>
+<tr>
+<td align="center">3、 查询Student表的所有记录。</td>
+<td align="center">SELECT * FROM STUDENT;</td>
+</tr>
+<tr>
+<td align="center">4、 查询Score表中成绩在60到80之间的所有记录。</td>
+<td align="center">SELECT * FROM SCORE WHERE DEGREE BETWEEN 60 AND 80;</td>
+</tr>
+<tr>
+<td align="center">5、 查询Score表中成绩为85，86或88的记录。</td>
+<td align="center">SELECT * FROM SCORE WHERE DEGREE IN (85, 86, 88);</td>
+</tr>
+<tr>
+<td align="center">6、 查询Student表中“95031”班或性别为“女”的同学记录。</td>
+<td align="center">SELECT * FROM STUDENT WHERE CLASS = ‘95031’ OR SSEX = ‘女’;</td>
+</tr>
+<tr>
+<td align="center">7、 以Class降序查询Student表的所有记录。</td>
+<td align="center">SELECT * FROM STUDENT ORDER BY CLASS DESC;</td>
+</tr>
+<tr>
+<td align="center">8、 以Cno升序、Degree降序查询Score表的所有记录。</td>
+<td align="center">SELECT * FROM SCORE ORDER BY CNO ASC, DEGREE DESC;</td>
+</tr>
+<tr>
+<td align="center">9、 查询“95031”班的学生人数。</td>
+<td align="center">SELECT COUNT(SNO) FROM STUDENT WHERE CLASS = ‘95031’;</td>
+</tr>
+<tr>
+<td align="center">10、查询Score表中的最高分的学生学号和课程号。</td>
+<td align="center">SELECT SNO, CNO FROM SCORE WHERE DEGREE = (SELECT MAX(DEGREE) FROM SCORE);</td>
+</tr>
+<tr>
+<td align="center">11、查询“3-105”号课程的平均分。</td>
+<td align="center">SELECT AVG(DEGREE) FROM SCORE WHERE CNO = ‘3-105’;</td>
+</tr>
+<tr>
+<td align="center">12、查询Score表中至少有5名学生选修的并以3开头的课程的平均分数。</td>
+<td align="center">SELECT CNO, AVG(DEGREE) FROM SCORE WHERE CNO LIKE ‘3%’ GROUP BY CNO HAVING COUNT(SNO) &gt;= 5;</td>
+</tr>
+<tr>
+<td align="center">13、查询最低分大于70，最高分小于90的Sno列。</td>
+<td align="center">SELECT SNO FROM SCORE GROUP BY SNO HAVING MIN(DEGREE) &gt; 70 AND MAX(DEGREE) &lt;90;</td>
+</tr>
+<tr>
+<td align="center">14、查询所有学生的Sname、Cno和Degree列。</td>
+<td align="center">SELECT A.SNAME, A.SNO, B.DEGREE FROM STUDENT A JOIN SCORE B ON A.SNO = B.SNO;</td>
+</tr>
+<tr>
+<td align="center">15、查询所有学生的Sno、Cname和Degree列。</td>
+<td align="center">SELECT A.SNO, B.CNAME, A.DEGREE FROM SCORE A JOIN COURSE B ON A.CNO = B.CNO;</td>
+</tr>
+<tr>
+<td align="center">16、查询所有学生的Sname、Cname和Degree列。</td>
+<td align="center">SELECT A.SNAME, C.CNAME, B.DEGREE FROM STUDENT A JOIN (SCORE B, COURSE C) ON A.SNO = B.SNO AND B.CNO = C.CNO;</td>
+</tr>
+<tr>
+<td align="center">17、查询“95033”班所选课程的平均分。</td>
+<td align="center">SELECT AVG(DEGREE) FROM STUDENT A JOIN SCORE B ON A.SNO = B.SNO WHERE A.CLASS = ‘95031’;</td>
+</tr>
+<tr>
+<td align="center">18、假设使用如下命令建立了一个grade表：create table grade(low numeric(3,0),upp numeric(3,0),ranking char(1)); insert into grade values(90,100,’A’); insert into grade values(80,89,’B’); insert into grade values(70,79,’C’); insert into grade values(60,69,’D’); insert into grade values(0,59,’E’); 现查询所有同学的Sno、Cno和ranking列。</td>
+<td align="center">SELECT A.SNO, A.CNO, B.RANKING FROM SCORE A JOIN GRADE B ON A.DEGREE BETWEEN B.LOW AND B.UPP;</td>
+</tr>
+<tr>
+<td align="center">19、查询选修“3-105”课程的成绩高于“109”号同学成绩的所有同学的记录。</td>
+<td align="center">SELECT * FROM SCORE WHERE CNO = ‘3-105’ AND DEGREE &gt; (SELECT DEGREE FROM SCORE WHERE CNO = ‘3-105’ AND SNO = ‘109’);</td>
+</tr>
+<tr>
+<td align="center">20、查询score中选学一门以上课程的同学中分数为非最高分成绩的记录。</td>
+<td align="center">SELECT * FROM SCORE WHERE DEGREE NOT IN (SELECT MAX(DEGREE) FROM SCORE) AND SNO IN (SELECT SNO FROM SCORE GROUP BY SNO HAVING COUNT(SNO) &gt; 1);</td>
+</tr>
+<tr>
+<td align="center">21、查询成绩高于学号为“109”、课程号为“3-105”的成绩的所有记录。</td>
+<td align="center">SELECT * FROM SCORE WHERE SNO = ‘109’ AND CNO = ‘3-105’;</td>
+</tr>
+<tr>
+<td align="center">22、查询和学号为108的同学同年出生的所有学生的Sno、Sname和Sbirthday列。</td>
+<td align="center">SELECT SNO, SNAME, SBIRTHDAY FROM STUDENT WHERE YEAR(SBIRTHDAY) = (SELECT YEAR(SBIRTHDAY) FROM STUDENT WHERE SNO = ‘108’);</td>
+</tr>
+<tr>
+<td align="center">23、查询“张旭“教师任课的学生成绩。</td>
+<td align="center">SELECT SNO, DEGREE FROM SCORE WHERE CNO IN (SELECT CNO FROM COURSE A JOIN TEACHER B ON A.TNO = B.TNO WHERE B.TNAME = ‘张旭’);</td>
+</tr>
+<tr>
+<td align="center">24、查询选修某课程的同学人数多于5人的教师姓名。</td>
+<td align="center">SELECT TNAME FROM TEACHER A JOIN (COURSE B, SCORE C) ON (A.TNO = B.TNO AND B.CNO = C.CNO) GROUP BY TNAME HAVING COUNT(SNO) &gt; 5;</td>
+</tr>
+<tr>
+<td align="center">25、查询95033班和95031班全体学生的记录。</td>
+<td align="center">SELECT * FROM STUDENT WHERE CLASS IN (‘95033’, ‘95031’);</td>
+</tr>
+<tr>
+<td align="center">26、查询存在有85分以上成绩的课程Cno。</td>
+<td align="center">SELECT DISTINCT CNO FROM SCORE WHERE DEGREE &gt; 85;</td>
+</tr>
+<tr>
+<td align="center">27、查询出“计算机系”教师所教课程的成绩表。</td>
+<td align="center">SELECT A.* FROM SCORE A JOIN (COURSE B, TEACHER C) ON A.CNO = B.CNO AND B.TNO = C.TNO WHERE C.DEPART = ‘计算机系’;/SELECT * FROM SCORE WHERE CNO IN (SELECT A.CNO FROM COURSE A JOIN TEACHER B ON A.TNO = B.TNO WHERE B.DEPART = ‘计算机系’);</td>
+</tr>
+<tr>
+<td align="center">28、查询“计算机系”与“电子工程系”不同职称的教师的Tname和Prof。</td>
+<td align="center">SELECT TNAME, PROF FROM TEACHER WHERE DEPART = ‘计算机系’ AND PROF NOT IN (SELECT PROF FROM TEACHER WHERE DEPART = ‘电子工程系’);</td>
+</tr>
+<tr>
+<td align="center">29、查询选修编号为“3-105“课程且成绩至少高于选修编号为“3-245”的同学的Cno、Sno和Degree,并按Degree从高到低次序排序。</td>
+<td align="center">SELECT * FROM SCORE WHERE CNO = ‘3-105’ AND DEGREE &gt; ANY(SELECT DEGREE FROM SCORE WHERE CNO = ‘3-245’) ORDER BY DEGREE DESC;</td>
+</tr>
+<tr>
+<td align="center">30、查询选修编号为“3-105”且成绩高于所有选修编号为“3-245”课程的同学的Cno、Sno和Degree,并按Degree从高到低次序排序。</td>
+<td align="center">SELECT * FROM SCORE WHERE CNO = ‘3-105’ AND DEGREE &gt; ALL(SELECT DEGREE FROM SCORE WHERE CNO = ‘3-245’) ORDER BY DEGREE DESC;</td>
+</tr>
+<tr>
+<td align="center">31、查询所有教师和同学的name、sex和birthday。</td>
+<td align="center">SELECT SNAME AS NAME, SSEX AS SEX, SBIRTHDAY AS BIRTHDAY FROM STUDENT</td>
+</tr>
+<tr>
+<td align="center">UNION</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">SELECT TNAME AS NAME, TSEX AS SEX, TBIRTHDAY AS BIRTHDAY FROM TEACHER;</td>
+<td align="center"></td>
+</tr>
+<tr>
+<td align="center">32、查询所有“女”教师和“女”同学的name、sex和birthday。</td>
+<td align="center">SELECT SNAME AS NAME, SSEX AS SEX, SBIRTHDAY AS BIRTHDAY FROM STUDENT WHERE SSEX = ‘女’ UNION SELECT TNAME AS NAME, TSEX AS SEX, TBIRTHDAY AS BIRTHDAY FROM TEACHER WHERE TSEX = ‘女’;</td>
+</tr>
+<tr>
+<td align="center">33、查询成绩比该课程平均成绩低的同学的成绩表。</td>
+<td align="center">SELECT A.* FROM SCORE A WHERE DEGREE &lt; (SELECT AVG(DEGREE) FROM SCORE B WHERE A.CNO = B.CNO);</td>
+</tr>
+<tr>
+<td align="center">34、查询所有任课教师的Tname和Depart。</td>
+<td align="center">SELECT TNAME, DEPART FROM TEACHER A JOIN COURSE B ON A.TNO = B.TNO;/SELECT TNAME, DEPART FROM TEACHER WHERE TNO IN (SELECT TNO FROM COURSE);</td>
+</tr>
+<tr>
+<td align="center">35  查询所有未讲课的教师的Tname和Depart。</td>
+<td align="center">SELECT TNAME, DEPART FROM TEACHER A LEFT JOIN COURSE B USING(TNO) WHERE ISNULL(B.TNO);/SELECT TNAME, DEPART FROM TEACHER WHERE TNO NOT IN (SELECT TNO FROM COURSE);</td>
+</tr>
+<tr>
+<td align="center">36、查询至少有2名男生的班号。</td>
+<td align="center">SELECT CLASS FROM STUDENT WHERE SSEX = ‘男’ GROUP BY CLASS HAVING COUNT(*) &gt;= 2;</td>
+</tr>
+<tr>
+<td align="center">37、查询Student表中不姓“王”的同学记录。</td>
+<td align="center">SELECT * FROM STUDENT WHERE SNAME NOT LIKE ‘王%’;</td>
+</tr>
+<tr>
+<td align="center">38、查询Student表中每个学生的姓名和年龄。</td>
+<td align="center">SELECT SNAME, YEAR(NOW())-YEAR(SBIRTHDAY) AS AGE FROM STUDENT;</td>
+</tr>
+<tr>
+<td align="center">39、查询Student表中最大和最小的Sbirthday日期值。</td>
+<td align="center">SELECT MAX(SBIRTHDAY), MIN(SBIRTHDAY) FROM STUDENT;</td>
+</tr>
+<tr>
+<td align="center">40、以班号和年龄从大到小的顺序查询Student表中的全部记录。</td>
+<td align="center">SELECT * FROM STUDENT ORDER BY CLASS DESC, SBIRTHDAY ASC;</td>
+</tr>
+<tr>
+<td align="center">41、查询“男”教师及其所上的课程。</td>
+<td align="center">SELECT CNAME FROM COURSE A JOIN TEACHER B ON A.TNO = B.TNO WHERE B.TSEX = ‘男’;</td>
+</tr>
+<tr>
+<td align="center">42、查询最高分同学的Sno、Cno和Degree列。</td>
+<td align="center">SELECT SNO, CNO, DEGREE FROM SCORE WHERE DEGREE = (SELECT MAX(DEGREE) FROM SCORE);</td>
+</tr>
+<tr>
+<td align="center">43、查询和“李军”同性别的所有同学的Sname。</td>
+<td align="center">SELECT SNAME FROM STUDENT WHERE SSEX = (SELECT SSEX FROM STUDENT WHERE SNAME = ‘李军’);</td>
+</tr>
+<tr>
+<td align="center">44、查询和“李军”同性别并同班的同学Sname。</td>
+<td align="center">SELECT SNAME FROM STUDENT A JOIN (SELECT SSEX, CLASS FROM STUDENT WHERE SNAME = ‘李军’) B ON A.SSEX = B.SSEX AND A.CLASS = B.CLASS;</td>
+</tr>
+<tr>
+<td align="center">45、查询所有选修“计算机导论”课程的“男”同学的成绩表。</td>
+<td align="center">SELECT A.* FROM SCORE A JOIN STUDENT B ON A.SNO = B.SNO WHERE CNO = (SELECT CNO FROM COURSE WHERE CNAME = ‘计算机导论’) AND SSEX = ‘男’;</td>
+</tr>
+</tbody></table>
+<p><strong>reference</strong></p>
+<p><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/19552975">知乎SQL学习</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2019/09/22/Shanghai-Residency/" rel="prev" title="非上海户籍的应届毕业生落户">
+                  <i class="fa fa-chevron-left"></i> 非上海户籍的应届毕业生落户
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2019/11/18/The-Way-to-Learn-Java/" rel="next" title="Java学习之路">
+                  Java学习之路 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">tjliu</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/muse/" rel="noopener" target="_blank">NexT.Muse</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+</body>
+</html>
