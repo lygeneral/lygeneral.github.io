@@ -130,7 +130,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -454,6 +454,303 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://lygeneral.github.io/2021/03/20/%E5%86%B3%E7%AD%96%E6%A0%91%E4%B9%8BID3%E5%92%8CC4.5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.jpg">
+      <meta itemprop="name" content="tjliu">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tjliu的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/20/%E5%86%B3%E7%AD%96%E6%A0%91%E4%B9%8BID3%E5%92%8CC4.5/" class="post-title-link" itemprop="url">决策树之CART树</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-03-20 13:04:12" itemprop="dateCreated datePublished" datetime="2021-03-20T13:04:12+08:00">2021-03-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-04 23:51:30" itemprop="dateModified" datetime="2023-09-04T23:51:30+08:00">2023-09-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/../images/Tongji-Scenery/%E5%90%8C%E6%B5%8E%E6%A8%B1%E8%8A%B1%E7%BB%BD%E6%94%BE.jpg"></p>
+<p>决策树（Decision Tree，DT）是一种基本的分类与回归的方法，通常用于解决分类问题，可以看做if-else规则的集合。下面主要介绍决策树中常用于分类的算法ID3和C4.5，由于ID3会优先选择属性值较多的特征，因此基于ID3设计了C4.5算法，使用信息增益比替代信息增益选择特征。</p>
+<h2 id="信息增益"><a href="#信息增益" class="headerlink" title="信息增益"></a>信息增益</h2><p>在信息论与概率统计中，熵（Entropy）是表示随机变量不确定性的度量。设$X$是一个取有限个值的离散随机变量，其概率分布为：</p>
+<p>$$P(X=x_i)=p_i,\ i=1,2,…,n$$</p>
+<p>则随机变量$X$的熵定义为：</p>
+<p>$$H(X)=-\sum_{i=1}^np_ilogp_i$$</p>
+<p>同时，条件熵（Conditional Entropy）$H(Y|X)$表示在已知随机变量$X$的条件下随机变量$Y$的不确定性。信息增益（Information Gain）则表示得知特征$X$的信息而使得$Y$的信息不确定性减少的程度。因此，特征$A$对训练数据集$D$的信息增益$g(D,A)$定义为集合$D$的经验熵$H(D)$与特征$A$给定条件下$D$的经验条件熵$H(D|A)$之差：</p>
+<p>$$g(D,A)=H(D)-H(D|A)$$</p>
+<p>数据集$D$共有$K$个类别，$C_k$表示样本集合$D$中属于第$k$类的样本子集，$|C_k|$表示该子集的元素个数。$H(D)$表示原始 数据中不同类别出现产生的不确定性，$H(D|A)$表示样本集合$D$在特征$A$下划分为$n$个新的集合后各个新集合$D_i$的熵按样本量进行加权平均，由此可以看出其满足：</p>
+<p>$$H(D)=-\sum_{k=1}^K\frac{|C_k|}{|D|}log_2\frac{|C_k|}{|D|}$$</p>
+<p>$$H(D|A)=\sum_{i=1}^n\frac{|D_i|}{|D|}H(D_i)=-\sum_{i=1}^n\frac{|D_i|}{|D|}\sum_{k=1}^K\frac{|D_{ik}|}{|D_i|}log_2\frac{|D_{ik}|}{|D_i|})$$</p>
+<h2 id="ID3"><a href="#ID3" class="headerlink" title="ID3"></a>ID3</h2><p>ID3的核心在决策树各个结点上应用<strong>信息增益</strong>准则选择特征，递归地构建决策树。</p>
+<p>现以信用卡审批为例，假如共有5个用户申请信用卡，年龄有两个属性（年轻、年长），工资有三个属性（高、中、低），最终分类结果有两类（准入，拒绝），如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>年龄</th>
+<th>工资</th>
+<th>类别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>小A</td>
+<td>年轻</td>
+<td>高</td>
+<td>准入</td>
+</tr>
+<tr>
+<td>小B</td>
+<td>年轻</td>
+<td>中</td>
+<td>准入</td>
+</tr>
+<tr>
+<td>小C</td>
+<td>年轻</td>
+<td>低</td>
+<td>拒绝</td>
+</tr>
+<tr>
+<td>小D</td>
+<td>年长</td>
+<td>高</td>
+<td>准入</td>
+</tr>
+<tr>
+<td>小E</td>
+<td>年长</td>
+<td>中</td>
+<td>拒绝</td>
+</tr>
+</tbody></table>
+<p>在这个问题中，按类别占比计算：</p>
+<p>$$H(D)=-\frac{3}{5}log_2\frac{3}{5}-\frac{2}{5}log_2\frac{2}{5}=0.971$$</p>
+<p>然后分别按特征“年龄”、“工资”计算条件熵：</p>
+<p>$$H(D|年龄)=\frac{3}{5}H(年轻)+\frac{2}{5}H(年长)=\frac{3}{5}(-\frac{2}{3}log_2\frac{2}{3}-\frac{1}{3}log_2\frac{1}{3})+\frac{2}{5}(-\frac{1}{2}log_2\frac{1}{2}-\frac{1}{2}log_2\frac{1}{2})=0.951$$</p>
+<p>$$H(D|工资)=\frac{2}{5}H(高)+\frac{2}{5}H(中)+\frac{1}{5}H(低)=\frac{2}{5}(-0)+\frac{2}{5}(-\frac{1}{2}log_2\frac{1}{2}-\frac{1}{2}log_2\frac{1}{2})+\frac{1}{5}(-0)=0.4$$</p>
+<p>于是各特征的信息增益为：</p>
+<p>$$g(D,年龄)=H(D)-H(D|年龄)=0.971-0.951=0.02$$</p>
+<p>$$g(D,工资)=H(D)-H(D|工资)=0.971-0.4=0.571$$</p>
+<p>显然，特征“工资”的信息增益最大，决策树第一个结点使用该特征，将小A、小C、小D直接划分至叶节点（准入或拒绝）中。然后按照特征”年龄”对余下的小B、小E进行划分，至此所有样本已划分完毕，完成决策树生长。</p>
+<h2 id="C4-5"><a href="#C4-5" class="headerlink" title="C4.5"></a>C4.5</h2><p>由于ID3会优先选择属性值较多的特征，因此基于ID3基础上设计了C4.5算法，使用<strong>信息增益比</strong>选择特征。特征$A$对数据集$D$的信息增益比定义为：</p>
+<p>$$g_R(D,A)=\frac{g(D,A)}{H_A(D)}$$</p>
+<p>其中$H_A(D)=-\sum_{i=1}^n\frac{|D_i|}{|D|}log_2\frac{|D_i|}{|D|}$为数据集$D$关于特征$A$的取值熵，与$H(D)$不同的是$H(D)$是样本$D$按类别不确定性计算的熵，而$H_A(D)$是样本$D$按特征$A$划分的类别不确定性计算的熵。</p>
+<p>由此计算出数据集关于每个特征的取值熵：</p>
+<p>$$H_{年龄}(D)=-\frac{3}{5}log_2\frac{3}{5}-\frac{2}{5}log_2\frac{2}{5}=0.971$$</p>
+<p>$$H_{工资}(D)=-\frac{2}{5}log_2\frac{2}{5}-\frac{2}{5}log_2\frac{2}{5}-\frac{1}{5}log_2\frac{1}{5}=1.522$$</p>
+<p>于是，计算各个特征的信息增益比为：</p>
+<p>$$g_R(D,年龄)=\frac{g(D,年龄)}{H_{年龄}(D)}=\frac{0.02}{0.971}=0.021$$</p>
+<p>$$g_R(D,工资)=\frac{g(D,工资)}{H_{工资}(D)}=\frac{0.571}{1.522}=0.375$$</p>
+<p>信息增益比最大的仍是特征”工资”，但通过信息增益比，特征“年龄”对应的指标略有上升。</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://lygeneral.github.io/2021/03/09/%E5%86%B3%E7%AD%96%E6%A0%91%E4%B9%8BCART%E6%A0%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.jpg">
+      <meta itemprop="name" content="tjliu">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tjliu的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2021/03/09/%E5%86%B3%E7%AD%96%E6%A0%91%E4%B9%8BCART%E6%A0%91/" class="post-title-link" itemprop="url">决策树之CART树</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2021-03-09 13:04:12" itemprop="dateCreated datePublished" datetime="2021-03-09T13:04:12+08:00">2021-03-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2023-09-04 23:50:52" itemprop="dateModified" datetime="2023-09-04T23:50:52+08:00">2023-09-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/../images/Tongji-Scenery/%E5%90%8C%E6%B5%8E%E5%A4%8F%E6%99%AF.jpg"></p>
+<p>分类与回归树（Classification And Regression Tree，CART）由Breiman等在1984年提出，是应用广泛的决策树学习方法。与ID3、C4.5不同的是，CART使用二叉树，内部节点特征的取值为“是”和“否”，左分支为取值为“是”的分支，右分支是取值为“否”的分支，递归地二分每个特征，既可以用于分类也可以用于回归。分类树用基尼指数（Gini Index）最小化准则，回归树用平方误差最小化准则，进行特征选择，生成二叉树。</p>
+<h2 id="分类树"><a href="#分类树" class="headerlink" title="分类树"></a>分类树</h2><p>CART分类树用<strong>基尼指数</strong>选择最优特征，同时决定该特征的最优二值切分点。</p>
+<p>分类问题中，假设有$K$个类，样本点属于第$k$类的概率为$p_k$，则概率分布的基尼指数定义为：</p>
+<p>$Gini(p)=\sum_{k=1}^Kp_k(1-p_k)=1-\sum_{k=1}^Kp_k^2$</p>
+<p>对于二分类问题，若样本点属于第一类的概率是$p$，则概率分布的基尼指数为：</p>
+<p>$$Gini(p)=2p(1-p)$$</p>
+<p>对于给定的样本集合$D$，$C_K$是$D$中属于第$k$类的样本子集，$K$是类的个数，其基尼指数为：</p>
+<p>$Gini(D)=1-\sum_{k=1}^K(\frac{|C_k|}{D})^2$</p>
+<p> 如果样本集合$D$根据特征$A$是否取值某一可能值$a$被分割为$D_1$和$D_2$，则在特征$A$的条件下$D$的基尼指数即切割后的集合的以集合样本量为权重的加权平均，计算得到：</p>
+<p>$$Gini(D,A)=\frac{|D_1|}{|D|}Gini(D_1)+\frac{|D_2|}{|D|}Gini(D_2)$$</p>
+<p>基尼指数$Gini(D)$表示集合$D$的不确定性，而基尼指数$Gini(D,A)$表示集合$D$经过特征$A$切割后集合$D$的不确定性。基尼指数值越大，样本集合的不确定性也就越大，这一点与熵相似。</p>
+<p>以信用卡审批为例，假如共有5个用户申请信用卡，年龄有两个属性（年轻、年长），工资有三个属性（高、中、低），最终分类结果有两类（准入，拒绝），如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>年龄</th>
+<th>工资</th>
+<th>类别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>小A</td>
+<td>年轻</td>
+<td>高</td>
+<td>准入</td>
+</tr>
+<tr>
+<td>小B</td>
+<td>年轻</td>
+<td>中</td>
+<td>准入</td>
+</tr>
+<tr>
+<td>小C</td>
+<td>年轻</td>
+<td>低</td>
+<td>拒绝</td>
+</tr>
+<tr>
+<td>小D</td>
+<td>年长</td>
+<td>高</td>
+<td>准入</td>
+</tr>
+<tr>
+<td>小E</td>
+<td>年长</td>
+<td>中</td>
+<td>拒绝</td>
+</tr>
+</tbody></table>
+<p>在这个问题中，分别计算特征“年龄”、“工资”条件下样本的基尼指数，首先计算特征”年龄”的基尼指数：</p>
+<p>$$Gini(D,A_{年龄})=\frac{3}{5}Gini(年轻)+\frac{2}{5}Gini(年长)=\frac{3}{5}(2\times\frac{2}{3}\times(1-\frac{2}{3}))+\frac{2}{5}(2\times\frac{1}{2}\times(1-\frac{1}{2}))=0.467$$</p>
+<p>由于特征”年龄”只有一个切分点，所以它就是最优切分点。</p>
+<p>然后计算特征”工资”的基尼指数：</p>
+<p>$$Gini(D,A_{工资}=高)=\frac{2}{5}Gini(高)+\frac{3}{5}Gini(低中)=\frac{2}{5}(2\times1\times(1-1))+\frac{3}{5}(2\times\frac{1}{3}\times(1-\frac{1}{3}))=0.267$$</p>
+<p>$$Gini(D,A_{工资}=中)=\frac{2}{5}Gini(中)+\frac{3}{5}Gini(低高)=\frac{2}{5}(2\times1\times(1-1))+\frac{3}{5}(2\times\frac{2}{3}\times(1-\frac{2}{3}))=0.267$$</p>
+<p>$$Gini(D,A_{工资}=低)=\frac{2}{5}Gini(低)+\frac{3}{5}Gini(中高)=\frac{1}{5}(2\times0\times(1-0))+\frac{4}{5}(2\times\frac{3}{4}\times(1-\frac{3}{4}))=0.3$$</p>
+<p>由于$Gini(D,A_{工资}=高)$和$Gini(D,A_{工资}=中)$相等，且最小，所以$A_{工资}=高$与$A_{工资}=中$都可以作为特征”工资”的最优切分点。</p>
+<p>在特征“年龄”、“工资”中$Gini(D,A_{工资}=高)$和$Gini(D,A_{工资}=中)$最小，所以选择特征”工资”为最优特征，$A_{工资}=高$或$A_{工资}=中$为最优切分点。于是根节点生成两个子节点，一个是叶节点，另一个继续使用以上方法选择最优特征和最优切分点。</p>
+<h2 id="回归树"><a href="#回归树" class="headerlink" title="回归树"></a>回归树</h2><p>假设$X$和$Y$分别为输入和输出变量，并且$Y$是<strong>连续变量</strong>，给定训练数据集$D={x_i,y_i}_{i=1}^n$，考虑生成回归树。采用启发式的方法，选择第$j$个变量$x^{(j)}$和它取的值$s$作为切分变量和切分点，并定义$R_1(j,s)={x|x^{(j)}\le s}$和$R_2(j,s)={x|x^{(j)}&gt;s}$，然后寻找最佳切分变量$x^{(j)}$</p>
+<p>和切分点$s$，因此求解：</p>
+<p>$$\underset{j,s}{min} [\underset{c_1}{min}\underset{x_i\epsilon R_1(j,s)}{\sum}(y_i-c_1)^2+\underset{c_2}{min}\underset{x_i\epsilon R_2(j,s)}{\sum}(y_i-c_2)^2]$$</p>
+<p>其中$c_1=ave(y_i|x_i\epsilon R_1(j,s))$，$c_2=ave(y_i|x_i\epsilon R_2(j,s))$。对固定输入变量$x^{(j)}$可寻找到最优切分点$s$。<strong>遍历所有输入变量，找到最优的切分变量$x^{(j)}$及该变量的取值$s$，构成一个对$(j,s)$，据此将输入分为两个区域（CART树为二叉树）</strong>。接着，对每个区域重复上述划分过程，直到满足停止条件为止，生成回归树，此回归树通常称为最小二乘回归树。最终将输入空间划分为$M$个区域$R_1,R_2,…,R_M$，生成决策树：</p>
+<p>$$f(x)=\sum_{m=1}^Mc_mI(x\epsilon R_m)$$</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="https://lygeneral.github.io/2021/02/20/%E9%99%8D%E7%BB%B4%E4%B9%8B%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -485,7 +782,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-04 23:44:20" itemprop="dateModified" datetime="2023-09-04T23:44:20+08:00">2023-09-04</time>
+      <time title="修改时间：2023-09-04 23:50:12" itemprop="dateModified" datetime="2023-09-04T23:50:12+08:00">2023-09-04</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -507,7 +804,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <p><img src="/../images/Reduce-Dimension-PCA/%E5%90%8C%E6%B5%8E%E6%98%A5%E8%89%B2.jpg"></p>
+          <p><img src="/../images/Tongji-Scenery/%E5%90%8C%E6%B5%8E%E6%98%A5%E8%89%B2.jpg"></p>
 <p>高维空间的数据常常包含许多噪声，容易产生维度灾难，在数据处理时需采用降维的方式提升特征表达能力。而主成分分析（Principal Components Analysis，PCA）作为经典的降维方法，值得我们去探讨。在做PCA降维时有两个角度可以切入，<strong>其一是最大投影方差理论，其二是最小平方误差理论</strong>。</p>
 <h2 id="维度灾难"><a href="#维度灾难" class="headerlink" title="维度灾难"></a>维度灾难</h2><p>按照常理来说，由于高维数据由于特征类型更多，比低维数据更容易进行划分，这也是SVM升维的原因。但是过高的维度容易造成数据的稀疏，模型的过拟合。</p>
 <p>假设在一个d维空间中，棱长为1的超立方体的体积为$V_{超立方体}=1$，其内接超球体体积为$V_{超球体}=k(0.5)^d$，则$\lim_{d\rightarrow\infty}V_{超球体}=0$。在高维空间下，超球体的体积几乎为0，<strong>数据样本分布在超立方体的壳体上，造成数据的稀疏性</strong>，出现维度灾难。在计算欧式距离时，由于单个维度的影响度越来越小，任意样本之间的距离趋于相同，因此在高维空间用距离欧氏距离，曼哈顿距离，马氏距离）来衡量样本相似性的方法已经渐渐失效，需要将样本进行降维。</p>
@@ -1188,225 +1485,6 @@
 <p>日本培养“能力”的自我修养，其理由在于能改善他本人驾驭生活的能力。他们说，修养初期，人们也许感到难以忍受，但这种感觉不久就会消失，因为他终究会享受其中的乐趣，否则就会抛弃修养。徒弟要在商业上出色地发挥作用，少年要学习“柔道”，媳妇要学习适应婆婆的要求。修养就是磨掉“身上的”。它会使人变成一把锋利的刀。“圆熟”就是一种无我的境界，“圆熟”者就完全意识不到“我正在做什么”，好像电流在电路中自由流动，不需用力，行为与行为者内心所描写的形象完全一致。</p>
 <h2 id="儿童教育"><a href="#儿童教育" class="headerlink" title="儿童教育"></a>儿童教育</h2><p>日本的人生曲线与美国的人生曲线正好相反。他是一根很大的浅底U字形曲线，允许婴儿和老人有最大的自由和任性。随着幼儿期的过去，约束逐渐增加，结婚前后个人自由降至最低线。日本人在幼儿期过的是有特权和娇纵的生活，此后在接受各种训练过程中，他们始终保持着那种“不知耻”年代的欢乐生活的记忆。六七岁以后，“谨言慎行”、 “知耻”，这类责任逐渐加在他们身上，而且背后有强大的压力，如果有过错，家庭就会反对他。由于儿童教育的不连续性而造成日本人的两面性格。值得注意的是，在日本只有得到其他集团的承认，才能指望本集团的支持。如果外部人不赞成或加以非难，本集团也会反对他、惩罚他，除非他能使其他集团撤销或直到撤销这一非难。由于这种机制，‘外部世界’赞同的重要地位也许是其他任何社会不能相比的。</p>
 <p><strong>注</strong>：日本仿照中国的京城建造了奈良城。</p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://lygeneral.github.io/2019/02/03/Hexo-Hueman-Valine-Comment-System/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.jpg">
-      <meta itemprop="name" content="tjliu">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="tjliu的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/02/03/Hexo-Hueman-Valine-Comment-System/" class="post-title-link" itemprop="url">Hueman添加Valine评论系统</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2019-02-03 15:41:26" itemprop="dateCreated datePublished" datetime="2019-02-03T15:41:26+08:00">2019-02-03</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2021-12-26 01:11:20" itemprop="dateModified" datetime="2021-12-26T01:11:20+08:00">2021-12-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">博客</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="/../images/Hexo-Hueman-Valine-Comment-System/Comment-logo-1640023047247.jpg"></p>
-<p>Hexo的评论系统有很多，常见的有多说、网易云跟帖、畅言、来必力（LiveRe）、Disqus、Hypercomments和Valine，其中多说和网易云已经失效，畅言需要备案，LiveRe加载速度慢。在此，我选择Valine作为博客的评论系统。Valine的详细介绍和使用方法见<a target="_blank" rel="noopener" href="https://valine.js.org/">Valine官网</a>。</p>
-<h2 id="LeanCloud配置"><a href="#LeanCloud配置" class="headerlink" title="LeanCloud配置"></a>LeanCloud配置</h2><p>首先在<a target="_blank" rel="noopener" href="https://leancloud.cn/">LeanCloud官网</a>注册账号，然后进入控制台，创建应用。</p>
-<p><img src="/../images/Hexo-Hueman-Valine-Comment-System/creatApplication-1640023049274.jpg"></p>
-<p>然后进入应用后，获取App ID和App Key，后面对Hueman主题进行配置时需要使用。</p>
-<p><img src="/../images/Hexo-Hueman-Valine-Comment-System/appID-Key-1640023050815.jpg"></p>
-<p>为了提高数据的安全性绑定域名，进入安全中心在Web安全域名填入域名。</p>
-<p><img src="/../images/Hexo-Hueman-Valine-Comment-System/SecureDomain-1640023052398.jpg"></p>
-<h2 id="Hueman进行配置"><a href="#Hueman进行配置" class="headerlink" title="Hueman进行配置"></a>Hueman进行配置</h2><p>由于Hueman主题提供Valine评论系统的接口，配置Valine评论系统的过程非常简单。在Hueman主题的配置文件_config.yml中找到comment区域，并使用以下参数对valine进行配置，在appId和appKey中分别填入LeanCloud应用中的App ID和App Key。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">valine: # Valine Comment System https://github.com/xCss/Valine</span><br><span class="line">    on: true # enter true to enable valine</span><br><span class="line">    appId: # enter the leancloud application appId here</span><br><span class="line">    appKey: # enter the leancloud application appKey here</span><br><span class="line">    notify: false # enter true to enable &lt;Mail notifier&gt; https://github.com/xCss/Valine/wiki/Valine-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E9%82%AE%E4%BB%B6%E6%8F%90%E9%86%92%E8%AE%BE%E7%BD%AE</span><br><span class="line">    verify: false # enter true to enable &lt;Validation code&gt;</span><br><span class="line">    placeholder: 撰写评论 # enter the comment box placeholder</span><br><span class="line">    avatar: wavatar # (&#x27;&#x27;/mm/identicon/monsterid/wavatar/retro/hide), more to see https://valine.js.org/avatar/</span><br><span class="line">    avatar_cdn: https://gravatar.loli.net/avatar/ # avatar CDN address, default gravatar.loli.net</span><br><span class="line">    pageSize: 10 # comments of one page</span><br></pre></td></tr></table></figure>
-
-<p><strong>注意</strong>：在添加Valine作为评论系统时，需要将其他几种评论系统删除。由于Hueman主题中comment部分默认使用disqus评论系统，导致我如何设置都不能正常显示Valine，折腾了很久。把disqus后的hexo-theme-hueman删除后，Valine评论系统终于能够正常工作。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">comment:</span><br><span class="line">    disqus: hexo-theme-hueman # enter disqus shortname here</span><br></pre></td></tr></table></figure>
-
-<h2 id="评论管理"><a href="#评论管理" class="headerlink" title="评论管理"></a>评论管理</h2><p>对博客中的文章进行评论后，进入LeanCloud的控制台中，在存储中找到Class Comment对评论进行管理。</p>
-<p><img src="/../images/Hexo-Hueman-Valine-Comment-System/CommentManagement-1640023055306.jpg"></p>
-<p><strong>Reference</strong></p>
-<p><a target="_blank" rel="noopener" href="https://qdhaiqiang.github.io/">马海强的博客</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://lygeneral.github.io/2019/01/30/Japan-Travel/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/logo.jpg">
-      <meta itemprop="name" content="tjliu">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="tjliu的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2019/01/30/Japan-Travel/" class="post-title-link" itemprop="url">日本之旅-东京镰仓富士山京都大阪奈良</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2019-01-30 23:22:50" itemprop="dateCreated datePublished" datetime="2019-01-30T23:22:50+08:00">2019-01-30</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2021-12-26 01:11:28" itemprop="dateModified" datetime="2021-12-26T01:11:28+08:00">2021-12-26</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/%E6%B8%B8%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">游记</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="/../images/Japan-Travel/Mount-Fuji-and-Cherry-Blossoms-1640023062218.jpg"><br>日本一共有一都（东京都）一道（北海道）两府（大阪府和京都府）四十三县。本次长达9天的行程包含日本东京、镰仓、富士山、京都、大阪和奈良。在日本乘坐扶梯时发现不同地方的站位有所不同，在东京适应了靠左侧站立，到了大阪又变成了靠右站立。查了一下资料有以下三种可能：1）大阪万博会时，根据国际标准，在扶梯等公共场合都是“左侧通行”，便由此固定下来了这个模式；2）在大阪梅田第一次设置自动人行道的时候，用右手扶着扶手乘坐的人较多，于是就呼吁大家把左边空出来；3）在江户时代，居住着很多武士，为了不让刀鞘相碰，大家都习惯左侧通行。另一方，大阪的商人有着右手拿算盘和钱袋走路的习惯，所以遗传到现在，人们还是喜欢靠右行走。</p>
-<h2 id="交通"><a href="#交通" class="headerlink" title="交通"></a>交通</h2><h3 id="航班"><a href="#航班" class="headerlink" title="航班"></a>航班</h3><p>可以在<a target="_blank" rel="noopener" href="https://www.ana.co.jp/zh/cn/">全日空ANA官网</a>购买往返机票，越提前越便宜。</p>
-<h3 id="新干线"><a href="#新干线" class="headerlink" title="新干线"></a>新干线</h3><p>东京可以乘坐东海道、山阳新干线（800元左右）至京都，从右侧可以看到富士山。由于我们有富士山的行程，所以从东京到富士山停留一晚后，从富士山乘坐巴士去三岛，再从三岛乘坐东海道、山阳新干线（600元左右）到京都。</p>
-<h3 id="公交-地铁"><a href="#公交-地铁" class="headerlink" title="公交/地铁"></a>公交/地铁</h3><p>ICOCA（西日本购买退卡）和SUICA（东日本购买退卡）在日本大部分区域均可以使用，若不考虑退卡没有什么区别。</p>
-<p>如果行程中需要多次乘坐地铁，可以考虑东京/京都Metro1-3日券，票券有效期从第一次使用激活后开始计算使用时长，按照24小时制进行计时（大部分地铁运营时间：5:00-24:00）</p>
-<h2 id="住宿"><a href="#住宿" class="headerlink" title="住宿"></a>住宿</h2><p>airbnb预定民宿，订了两家民宿都比较坑，由于出行时间在樱花季，价格偏高而且住宿条件不怎么样。除非有认识的人住过或网上强烈推荐的民宿可供选择，否则不推荐。本来在airbub上预定了民宿，但是条件很差，便在东京新宿附近现找酒店，走到西铁Inn酒店里面询了价感觉不错就住下，不想折腾了，没想到非常干净舒适，比较推荐。</p>
-<p>Agoda和Booking预定酒店/民宿，河口湖温泉酒店本来想预定富士豪景酒店的，但是富士豪景酒店没房了，只好在Agoda上预定了河口湖温泉新世纪酒店。新世纪酒店服务非常好，住宿条件也不错，价格合适的话比较推荐。我们在Booking上预定了大阪的比尤纳戈米套房度假屋，和照片一模一样，条件很好，离地铁站也很近，强烈推荐。</p>
-<h2 id="行程制定"><a href="#行程制定" class="headerlink" title="行程制定"></a>行程制定</h2><p>虽然国内可以访问<a target="_blank" rel="noopener" href="http://www.google.cn/maps">谷歌地图</a>，但是不能制定行程，最好的是翻墙后访问国外的<a target="_blank" rel="noopener" href="https://www.google.com/maps">谷歌地图</a>。首先要注册一个Google账号，在谷歌地图界面中点击左上角的菜单，选择[你的地点]，在[地图]中点击建立地图，就可以新建图层，添加酒店、景点信息，制定旅游线路。以下是我指定的日本旅游行程。</p>
-<h2 id="行程"><a href="#行程" class="headerlink" title="行程"></a>行程</h2><h3 id="Day1-广州-东京"><a href="#Day1-广州-东京" class="headerlink" title="Day1 广州-东京"></a>Day1 广州-东京</h3><p>9:35（国内时间）出发-14:30（日本当地时间）抵达东京成田国际机场，然后乘坐到东京站的巴士（1000日元），然后转地铁到西新宿。由于民宿太坑，重新找酒店折腾一晚上。</p>
-<p>21:00在西新宿附近吃晚饭</p>
-<p>22:00西铁Inn酒店住宿</p>
-<h3 id="Day2-东京"><a href="#Day2-东京" class="headerlink" title="Day2 东京"></a>Day2 东京</h3><p>8:00出发-9:00抵达迪士尼海洋乐园（比较热门的项目可以拿fastpass，在指定时间内直接进去，不用排队。隔2小时可以拿一次fastpass，一定要利用好拿fp的机会，可以节省不少排队的时间）</p>
-<p>21:30回市区</p>
-<p>22:30西铁Inn酒店住宿</p>
-<h3 id="Day3-东京-镰仓"><a href="#Day3-东京-镰仓" class="headerlink" title="Day3 东京-镰仓"></a>Day3 东京-镰仓</h3><p>9:00小田急百货商场购物</p>
-<p>12:00出发13:00抵达藤泽站（乘坐小田急电1小时，在新宿购买小田急电铁江之岛/镰仓周游券1470日元)</p>
-<p>13:30镰仓高校前站（乘坐江之电）</p>
-<p>14:00镰仓站，鹤冈八幡宫（小町通商业街很多小吃，乘坐江之电）</p>
-<p>16:00藤泽站（乘坐江之电）</p>
-<p>17:00新宿（乘坐小田急电1小时）</p>
-<p>18:00银座（在俺的烧肉吃晚饭，点的松阪牛肉套餐，很给力）</p>
-<p>22:00西铁Inn酒店住宿</p>
-<h3 id="Day4-东京-富士山"><a href="#Day4-东京-富士山" class="headerlink" title="Day4 东京-富士山"></a>Day4 东京-富士山</h3><p>10:00出发-12:00抵达富士山河口湖（乘坐高速直通巴士2小时，1750日元）</p>
-<p>15:00新仓山浅间公园（乘坐富士急行线30分钟)</p>
-<p>17:00河口湖游玩（山麓园吃日式烧烤，推荐）</p>
-<p>20:00河口湖温泉新世纪酒店泡温泉，住宿</p>
-<h3 id="Day5-富士山-京都"><a href="#Day5-富士山-京都" class="headerlink" title="Day5 富士山-京都"></a>Day5 富士山-京都</h3><p>8:00乘坐出租车到富士山最佳观赏点看富士山（前一天富士山被云挡住了，日本的出租车不是一般的贵）</p>
-<p>11:00出发-15:00抵达京都（乘坐大巴到三岛，转新干线，13570日元）</p>
-<p>15:30住宿登记（京都站）</p>
-<p>16:00伏见稻荷大社，千本鸟居游玩小时（全天开放）</p>
-<p>19:00京都站（北斗吃寿喜锅）</p>
-<p>22:00京都民宿住宿</p>
-<h3 id="Day6-京都"><a href="#Day6-京都" class="headerlink" title="Day6 京都"></a>Day6 京都</h3><p>8:00出发-8:30抵达三十三间堂，清水寺，三年坂二年坂，八坂神社，袛园游玩</p>
-<p>18:00乘坐电车去大阪</p>
-<p>22:00比尤纳戈米套房度假屋住宿</p>
-<h3 id="Day7-大阪"><a href="#Day7-大阪" class="headerlink" title="Day7 大阪"></a>Day7 大阪</h3><p>9:00出发-10:00抵达奈良（乘坐奈良线1小时）</p>
-<p>10:30奈良公园，东大寺游玩2小时</p>
-<p>13:00乘坐电车去大阪</p>
-<p>16:30心斋桥，道顿崛购物，晚餐</p>
-<p>22:00比尤纳戈米套房度假屋住宿</p>
-<h3 id="Day8-大阪"><a href="#Day8-大阪" class="headerlink" title="Day8 大阪"></a>Day8 大阪</h3><p>8:00出发-9:00抵达环球影城（没有fp，但是利用好单人通道能更快地排到项目）</p>
-<p>22:00关西国际机场</p>
-<h3 id="Day9-大阪-广州"><a href="#Day9-大阪-广州" class="headerlink" title="Day9 大阪-广州"></a>Day9 大阪-广州</h3><p>6:00出发-13:05抵达广州</p>
 
       
     </div>

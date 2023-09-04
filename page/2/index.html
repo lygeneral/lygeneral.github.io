@@ -130,7 +130,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">15</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -175,6 +175,225 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://lygeneral.github.io/2019/02/03/Hexo-Hueman-Valine-Comment-System/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.jpg">
+      <meta itemprop="name" content="tjliu">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tjliu的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/02/03/Hexo-Hueman-Valine-Comment-System/" class="post-title-link" itemprop="url">Hueman添加Valine评论系统</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-02-03 15:41:26" itemprop="dateCreated datePublished" datetime="2019-02-03T15:41:26+08:00">2019-02-03</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-12-26 01:11:20" itemprop="dateModified" datetime="2021-12-26T01:11:20+08:00">2021-12-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">博客</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/../images/Hexo-Hueman-Valine-Comment-System/Comment-logo-1640023047247.jpg"></p>
+<p>Hexo的评论系统有很多，常见的有多说、网易云跟帖、畅言、来必力（LiveRe）、Disqus、Hypercomments和Valine，其中多说和网易云已经失效，畅言需要备案，LiveRe加载速度慢。在此，我选择Valine作为博客的评论系统。Valine的详细介绍和使用方法见<a target="_blank" rel="noopener" href="https://valine.js.org/">Valine官网</a>。</p>
+<h2 id="LeanCloud配置"><a href="#LeanCloud配置" class="headerlink" title="LeanCloud配置"></a>LeanCloud配置</h2><p>首先在<a target="_blank" rel="noopener" href="https://leancloud.cn/">LeanCloud官网</a>注册账号，然后进入控制台，创建应用。</p>
+<p><img src="/../images/Hexo-Hueman-Valine-Comment-System/creatApplication-1640023049274.jpg"></p>
+<p>然后进入应用后，获取App ID和App Key，后面对Hueman主题进行配置时需要使用。</p>
+<p><img src="/../images/Hexo-Hueman-Valine-Comment-System/appID-Key-1640023050815.jpg"></p>
+<p>为了提高数据的安全性绑定域名，进入安全中心在Web安全域名填入域名。</p>
+<p><img src="/../images/Hexo-Hueman-Valine-Comment-System/SecureDomain-1640023052398.jpg"></p>
+<h2 id="Hueman进行配置"><a href="#Hueman进行配置" class="headerlink" title="Hueman进行配置"></a>Hueman进行配置</h2><p>由于Hueman主题提供Valine评论系统的接口，配置Valine评论系统的过程非常简单。在Hueman主题的配置文件_config.yml中找到comment区域，并使用以下参数对valine进行配置，在appId和appKey中分别填入LeanCloud应用中的App ID和App Key。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">valine: # Valine Comment System https://github.com/xCss/Valine</span><br><span class="line">    on: true # enter true to enable valine</span><br><span class="line">    appId: # enter the leancloud application appId here</span><br><span class="line">    appKey: # enter the leancloud application appKey here</span><br><span class="line">    notify: false # enter true to enable &lt;Mail notifier&gt; https://github.com/xCss/Valine/wiki/Valine-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E9%82%AE%E4%BB%B6%E6%8F%90%E9%86%92%E8%AE%BE%E7%BD%AE</span><br><span class="line">    verify: false # enter true to enable &lt;Validation code&gt;</span><br><span class="line">    placeholder: 撰写评论 # enter the comment box placeholder</span><br><span class="line">    avatar: wavatar # (&#x27;&#x27;/mm/identicon/monsterid/wavatar/retro/hide), more to see https://valine.js.org/avatar/</span><br><span class="line">    avatar_cdn: https://gravatar.loli.net/avatar/ # avatar CDN address, default gravatar.loli.net</span><br><span class="line">    pageSize: 10 # comments of one page</span><br></pre></td></tr></table></figure>
+
+<p><strong>注意</strong>：在添加Valine作为评论系统时，需要将其他几种评论系统删除。由于Hueman主题中comment部分默认使用disqus评论系统，导致我如何设置都不能正常显示Valine，折腾了很久。把disqus后的hexo-theme-hueman删除后，Valine评论系统终于能够正常工作。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">comment:</span><br><span class="line">    disqus: hexo-theme-hueman # enter disqus shortname here</span><br></pre></td></tr></table></figure>
+
+<h2 id="评论管理"><a href="#评论管理" class="headerlink" title="评论管理"></a>评论管理</h2><p>对博客中的文章进行评论后，进入LeanCloud的控制台中，在存储中找到Class Comment对评论进行管理。</p>
+<p><img src="/../images/Hexo-Hueman-Valine-Comment-System/CommentManagement-1640023055306.jpg"></p>
+<p><strong>Reference</strong></p>
+<p><a target="_blank" rel="noopener" href="https://qdhaiqiang.github.io/">马海强的博客</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://lygeneral.github.io/2019/01/30/Japan-Travel/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/logo.jpg">
+      <meta itemprop="name" content="tjliu">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tjliu的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/01/30/Japan-Travel/" class="post-title-link" itemprop="url">日本之旅-东京镰仓富士山京都大阪奈良</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-01-30 23:22:50" itemprop="dateCreated datePublished" datetime="2019-01-30T23:22:50+08:00">2019-01-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-12-26 01:11:28" itemprop="dateModified" datetime="2021-12-26T01:11:28+08:00">2021-12-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E6%B8%B8%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">游记</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/../images/Japan-Travel/Mount-Fuji-and-Cherry-Blossoms-1640023062218.jpg"><br>日本一共有一都（东京都）一道（北海道）两府（大阪府和京都府）四十三县。本次长达9天的行程包含日本东京、镰仓、富士山、京都、大阪和奈良。在日本乘坐扶梯时发现不同地方的站位有所不同，在东京适应了靠左侧站立，到了大阪又变成了靠右站立。查了一下资料有以下三种可能：1）大阪万博会时，根据国际标准，在扶梯等公共场合都是“左侧通行”，便由此固定下来了这个模式；2）在大阪梅田第一次设置自动人行道的时候，用右手扶着扶手乘坐的人较多，于是就呼吁大家把左边空出来；3）在江户时代，居住着很多武士，为了不让刀鞘相碰，大家都习惯左侧通行。另一方，大阪的商人有着右手拿算盘和钱袋走路的习惯，所以遗传到现在，人们还是喜欢靠右行走。</p>
+<h2 id="交通"><a href="#交通" class="headerlink" title="交通"></a>交通</h2><h3 id="航班"><a href="#航班" class="headerlink" title="航班"></a>航班</h3><p>可以在<a target="_blank" rel="noopener" href="https://www.ana.co.jp/zh/cn/">全日空ANA官网</a>购买往返机票，越提前越便宜。</p>
+<h3 id="新干线"><a href="#新干线" class="headerlink" title="新干线"></a>新干线</h3><p>东京可以乘坐东海道、山阳新干线（800元左右）至京都，从右侧可以看到富士山。由于我们有富士山的行程，所以从东京到富士山停留一晚后，从富士山乘坐巴士去三岛，再从三岛乘坐东海道、山阳新干线（600元左右）到京都。</p>
+<h3 id="公交-地铁"><a href="#公交-地铁" class="headerlink" title="公交/地铁"></a>公交/地铁</h3><p>ICOCA（西日本购买退卡）和SUICA（东日本购买退卡）在日本大部分区域均可以使用，若不考虑退卡没有什么区别。</p>
+<p>如果行程中需要多次乘坐地铁，可以考虑东京/京都Metro1-3日券，票券有效期从第一次使用激活后开始计算使用时长，按照24小时制进行计时（大部分地铁运营时间：5:00-24:00）</p>
+<h2 id="住宿"><a href="#住宿" class="headerlink" title="住宿"></a>住宿</h2><p>airbnb预定民宿，订了两家民宿都比较坑，由于出行时间在樱花季，价格偏高而且住宿条件不怎么样。除非有认识的人住过或网上强烈推荐的民宿可供选择，否则不推荐。本来在airbub上预定了民宿，但是条件很差，便在东京新宿附近现找酒店，走到西铁Inn酒店里面询了价感觉不错就住下，不想折腾了，没想到非常干净舒适，比较推荐。</p>
+<p>Agoda和Booking预定酒店/民宿，河口湖温泉酒店本来想预定富士豪景酒店的，但是富士豪景酒店没房了，只好在Agoda上预定了河口湖温泉新世纪酒店。新世纪酒店服务非常好，住宿条件也不错，价格合适的话比较推荐。我们在Booking上预定了大阪的比尤纳戈米套房度假屋，和照片一模一样，条件很好，离地铁站也很近，强烈推荐。</p>
+<h2 id="行程制定"><a href="#行程制定" class="headerlink" title="行程制定"></a>行程制定</h2><p>虽然国内可以访问<a target="_blank" rel="noopener" href="http://www.google.cn/maps">谷歌地图</a>，但是不能制定行程，最好的是翻墙后访问国外的<a target="_blank" rel="noopener" href="https://www.google.com/maps">谷歌地图</a>。首先要注册一个Google账号，在谷歌地图界面中点击左上角的菜单，选择[你的地点]，在[地图]中点击建立地图，就可以新建图层，添加酒店、景点信息，制定旅游线路。以下是我指定的日本旅游行程。</p>
+<h2 id="行程"><a href="#行程" class="headerlink" title="行程"></a>行程</h2><h3 id="Day1-广州-东京"><a href="#Day1-广州-东京" class="headerlink" title="Day1 广州-东京"></a>Day1 广州-东京</h3><p>9:35（国内时间）出发-14:30（日本当地时间）抵达东京成田国际机场，然后乘坐到东京站的巴士（1000日元），然后转地铁到西新宿。由于民宿太坑，重新找酒店折腾一晚上。</p>
+<p>21:00在西新宿附近吃晚饭</p>
+<p>22:00西铁Inn酒店住宿</p>
+<h3 id="Day2-东京"><a href="#Day2-东京" class="headerlink" title="Day2 东京"></a>Day2 东京</h3><p>8:00出发-9:00抵达迪士尼海洋乐园（比较热门的项目可以拿fastpass，在指定时间内直接进去，不用排队。隔2小时可以拿一次fastpass，一定要利用好拿fp的机会，可以节省不少排队的时间）</p>
+<p>21:30回市区</p>
+<p>22:30西铁Inn酒店住宿</p>
+<h3 id="Day3-东京-镰仓"><a href="#Day3-东京-镰仓" class="headerlink" title="Day3 东京-镰仓"></a>Day3 东京-镰仓</h3><p>9:00小田急百货商场购物</p>
+<p>12:00出发13:00抵达藤泽站（乘坐小田急电1小时，在新宿购买小田急电铁江之岛/镰仓周游券1470日元)</p>
+<p>13:30镰仓高校前站（乘坐江之电）</p>
+<p>14:00镰仓站，鹤冈八幡宫（小町通商业街很多小吃，乘坐江之电）</p>
+<p>16:00藤泽站（乘坐江之电）</p>
+<p>17:00新宿（乘坐小田急电1小时）</p>
+<p>18:00银座（在俺的烧肉吃晚饭，点的松阪牛肉套餐，很给力）</p>
+<p>22:00西铁Inn酒店住宿</p>
+<h3 id="Day4-东京-富士山"><a href="#Day4-东京-富士山" class="headerlink" title="Day4 东京-富士山"></a>Day4 东京-富士山</h3><p>10:00出发-12:00抵达富士山河口湖（乘坐高速直通巴士2小时，1750日元）</p>
+<p>15:00新仓山浅间公园（乘坐富士急行线30分钟)</p>
+<p>17:00河口湖游玩（山麓园吃日式烧烤，推荐）</p>
+<p>20:00河口湖温泉新世纪酒店泡温泉，住宿</p>
+<h3 id="Day5-富士山-京都"><a href="#Day5-富士山-京都" class="headerlink" title="Day5 富士山-京都"></a>Day5 富士山-京都</h3><p>8:00乘坐出租车到富士山最佳观赏点看富士山（前一天富士山被云挡住了，日本的出租车不是一般的贵）</p>
+<p>11:00出发-15:00抵达京都（乘坐大巴到三岛，转新干线，13570日元）</p>
+<p>15:30住宿登记（京都站）</p>
+<p>16:00伏见稻荷大社，千本鸟居游玩小时（全天开放）</p>
+<p>19:00京都站（北斗吃寿喜锅）</p>
+<p>22:00京都民宿住宿</p>
+<h3 id="Day6-京都"><a href="#Day6-京都" class="headerlink" title="Day6 京都"></a>Day6 京都</h3><p>8:00出发-8:30抵达三十三间堂，清水寺，三年坂二年坂，八坂神社，袛园游玩</p>
+<p>18:00乘坐电车去大阪</p>
+<p>22:00比尤纳戈米套房度假屋住宿</p>
+<h3 id="Day7-大阪"><a href="#Day7-大阪" class="headerlink" title="Day7 大阪"></a>Day7 大阪</h3><p>9:00出发-10:00抵达奈良（乘坐奈良线1小时）</p>
+<p>10:30奈良公园，东大寺游玩2小时</p>
+<p>13:00乘坐电车去大阪</p>
+<p>16:30心斋桥，道顿崛购物，晚餐</p>
+<p>22:00比尤纳戈米套房度假屋住宿</p>
+<h3 id="Day8-大阪"><a href="#Day8-大阪" class="headerlink" title="Day8 大阪"></a>Day8 大阪</h3><p>8:00出发-9:00抵达环球影城（没有fp，但是利用好单人通道能更快地排到项目）</p>
+<p>22:00关西国际机场</p>
+<h3 id="Day9-大阪-广州"><a href="#Day9-大阪-广州" class="headerlink" title="Day9 大阪-广州"></a>Day9 大阪-广州</h3><p>6:00出发-13:05抵达广州</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
