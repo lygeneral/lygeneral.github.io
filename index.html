@@ -130,7 +130,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">13</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -428,114 +428,6 @@
 <p><strong>参考资料</strong></p>
 <p>1.<a target="_blank" rel="noopener" href="https://wylu.github.io/posts/a2725fd8/">NexT侧边栏配置</a></p>
 <p>2.<a target="_blank" rel="noopener" href="https://blog.csdn.net/mqdxiaoxiao/article/details/93644533">Hexo博客NexT主题下添加分类、标签、关于菜单项</a></p>
-
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://lygeneral.github.io/2021/02/20/%E9%99%8D%E7%BB%B4%E4%B9%8B%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/EveOneCat.gif">
-      <meta itemprop="name" content="tjliu">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="tjliu的博客">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/2021/02/20/%E9%99%8D%E7%BB%B4%E4%B9%8B%E4%B8%BB%E6%88%90%E5%88%86%E5%88%86%E6%9E%90/" class="post-title-link" itemprop="url">降维之主成分分析</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2021-02-20 13:04:12" itemprop="dateCreated datePublished" datetime="2021-02-20T13:04:12+08:00">2021-02-20</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2023-09-04 23:17:15" itemprop="dateModified" datetime="2023-09-04T23:17:15+08:00">2023-09-04</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/AI/" itemprop="url" rel="index"><span itemprop="name">AI</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <p><img src="/../images/Reduce-Dimension-PCA/%E5%90%8C%E6%B5%8E%E6%98%A5%E8%89%B2.jpg"></p>
-<p>高维空间的数据常常包含许多噪声，容易产生维度灾难，在数据处理时需采用降维的方式提升特征表达能力。而主成分分析（Principal Components Analysis，PCA）作为经典的降维方法，值得我们去探讨。在做PCA降维时有两个角度可以切入，<strong>其一是最大投影方差理论，其二是最小平方误差理论</strong>。</p>
-<h2 id="维度灾难"><a href="#维度灾难" class="headerlink" title="维度灾难"></a>维度灾难</h2><p>按照常理来说，由于高维数据由于特征类型更多，比低维数据更容易进行划分，这也是SVM升维的原因。但是过高的维度容易造成数据的稀疏，模型的过拟合。</p>
-<p>假设在一个d维空间中，棱长为1的超立方体的体积为$V_{超立方体}=1$，其内接超球体体积为$V_{超球体}=k(0.5)^d$，则$\lim_{d\rightarrow\infty}V_{超球体}=0$。在高维空间下，超球体的体积几乎为0，<strong>数据样本分布在超立方体的壳体上，造成数据的稀疏性</strong>，出现维度灾难。在计算欧式距离时，由于单个维度的影响度越来越小，任意样本之间的距离趋于相同，因此在高维空间用距离欧氏距离，曼哈顿距离，马氏距离）来衡量样本相似性的方法已经渐渐失效，需要将样本进行降维。</p>
-<h2 id="最大投影方差"><a href="#最大投影方差" class="headerlink" title="最大投影方差"></a>最大投影方差</h2><p>数据进行降维时，期望在投影至新的基向量上时数据仍具有较高的区分度，损失的信息量越小越好，投影之后的数据方差越大越好。</p>
-<blockquote>
-<p>现有样本$V=(v_1,v_2,…,v_n)^T$，其均值$\mu=\frac 1n\sum_{i=1}^nv_i$，其中$v_i$为$p$维列向量。如何通过最大投影方差理论进行降维？</p>
-</blockquote>
-<p>首先将样本进行中心化$v_i-\mu$，得到：</p>
-<p>$$X=(x_1,x_2,…,x_n)^T$$</p>
-<p>由于向量$x_i$在单位向量$\omega$上的投影为$\omega^Tx_i$，令$X$在$\omega$上的投影为$X’=(\omega^Tx_1,\omega^Tx_2,…,\omega^Tx_n)^T$。对于$X’$来说，满足：</p>
-<p>$$E(X’)=\frac 1n\sum_{i=1}^n\omega^Tx_i=\omega^T(\frac 1n\sum_{i=1}^nx_i)=0$$</p>
-<p>然后，开始计算$D(X’)$以找到一个投影方向$\omega$使得$X’$的方差尽可能大：</p>
-<p>$$D(X’)=\frac 1n\sum_{i=1}^n(\omega^Tx_i)^2=\frac 1n\sum_{i=1}^n\omega^Tx_ix_i^T\omega=\omega^T(\frac 1n\sum_{i=1}^nx_ix_i^T)\omega$$</p>
-<p>其中$\frac 1n\sum_{i=1}^nx_ix_i^T$为样本协方差矩阵，记作$S$。最大投影方差转化为最优化问题：</p>
-<p>$$\left{<br>\begin{matrix}<br> max(\omega^TS\omega)\<br> s.t.\ \omega^T\omega=1<br>\end{matrix}<br>\right.<br>\overset{拉格朗日乘子法}{\Rightarrow}L=\omega^TS\omega+\lambda(1-\omega^T\omega)$$</p>
-<p>最后$L$对$\omega$求导并令导数为0，求解得到$S\omega=\lambda\omega$，将其带入$D(X’)$，得到<br>$D(X’)=\lambda$。由此发现$x$投影后的方差就是协方差矩阵的特征值，我们要找到的最大的方差也就是协方差矩阵最大的特征值，最佳投影方向就是最大特征值所对应的特征向量，次佳投影方向是第二大特征值对应的特征向量，以此类推。对协方差矩阵进行特征值分解，将特征值从大到小排列。取特征值前$d$大对应的特征向量$\omega_1,\omega_2,…,\omega_d$，通过以下映射将$p$维的$x$映射到$d$维空间：</p>
-<p>$$x_i’=\begin{bmatrix}<br>\omega_1^Tx_i\<br>\omega_2^Tx_i\<br>…\<br>\omega_d^Tx_i<br>\end{bmatrix}$$</p>
-<h2 id="最小平方误差"><a href="#最小平方误差" class="headerlink" title="最小平方误差"></a>最小平方误差</h2><p>从另一个角度上来看，期望降维后的样本与原样本的距离尽可能小，即平方误差最小。</p>
-<blockquote>
-<p>现有样本$X=(x_1,x_2,…,x_n)^T$，其中$x_i$为$p$维列向量。</p>
-</blockquote>
-<p>当原来的$p$维坐标系转换坐标轴为$\omega_1,\omega_2,…,\omega_p$的p维新坐标系时，有$x_i=\sum_{k=1}^p(\omega_k^Tx_i)\omega_k$。当原来的坐标系转换坐标轴为$\omega_1,\omega_2,…,\omega_d$的d维新坐标系时，有$\overset {\sim}{x_i}=\sum_{k=1}^d(\omega_k^Tx_i)\omega_k$。于是有：</p>
-<p>$$J=\frac{1}{n}\sum_{i=1}^n\lVert x_i-\overset {\sim}{x_i}\rVert^2=\frac{1}{n}\sum_{i=1}^n\lVert\sum_{k=d+1}^p(\omega_k^Tx_i)\omega_k\rVert^2$$</p>
-<p>由于$\omega_k^Tx_i$是坐标，$\omega_k$是坐标轴，上式可以转化为：</p>
-<p>$$J=\frac{1}{n}\sum_{i=1}^n\sum_{k=d+1}^p(\omega_k^Tx_i)^2=\sum_{k=d+1}^p\omega_k^T(\frac{1}{n}\sum_{i=1}^nx_ix_i^T)\omega_k=\sum_{k=d+1}^p\omega_k^TS\omega_k$$</p>
-<p>最小平方误差转化为最优化问题：</p>
-<p>$$\left{<br>\begin{matrix}<br> \hat \omega_k = argmin\ \sum_{k=d+1}^p\omega_k^TS\omega_k\<br> s.t.\ \omega_k^T\omega_k=1<br>\end{matrix}<br>\right.<br>\Rightarrow J=\sum_{k=d+1}^p\lambda_k$$</p>
-<p>由此发现数据进行降维时产生的平方误差是协方差矩阵的特征值，要让平方误差最小就要找协方差矩阵最小的特征值，在降维时去掉小的特征值保留大的特征值。对协方差矩阵进行特征值分解，将特征值从大到小排列。这里与最大投影方差的结果一致，选取特征值前$d$大对应的特征向量$\omega_1,\omega_2,…,\omega_d$作为新坐标系下的坐标轴。</p>
 
       
     </div>
@@ -1408,6 +1300,103 @@
 <p>22:00关西国际机场</p>
 <h3 id="Day9-大阪-广州"><a href="#Day9-大阪-广州" class="headerlink" title="Day9 大阪-广州"></a>Day9 大阪-广州</h3><p>6:00出发-13:05抵达广州</p>
 
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://lygeneral.github.io/2019/01/20/SEO-Traffic-Statistics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/EveOneCat.gif">
+      <meta itemprop="name" content="tjliu">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tjliu的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/01/20/SEO-Traffic-Statistics/" class="post-title-link" itemprop="url">网站SEO优化流量统计</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-01-20 10:20:55" itemprop="dateCreated datePublished" datetime="2019-01-20T10:20:55+08:00">2019-01-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-12-26 01:11:36" itemprop="dateModified" datetime="2021-12-26T01:11:36+08:00">2021-12-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">博客</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/../images/SEO-Traffic-Statistics/SEO-logo-1640023076083.jpg"></p>
+<h1 id="SEO优化"><a href="#SEO优化" class="headerlink" title="SEO优化"></a>SEO优化</h1><p>搜索引擎优化（SEO，Search Engine Optimizatio）是一种利用搜索引擎的规则提高网站在有关搜索引擎内的自然排名的方式。</p>
+<h2 id="Google收录网站"><a href="#Google收录网站" class="headerlink" title="Google收录网站"></a>Google收录网站</h2><p>在搜索引擎中输入site:&lt;域名&gt;可以查看该域名是否被搜索引擎收录。想要网站被搜索引擎收录可以主动向搜索提交或者等待一段时间被搜索引擎抓取。网站搭建完成时我在Google里查看域名并未被收录，隔了一个月后在Google中输入site:&lt;域名&gt;竟然能查看到我的域名已经被Google抓取收录。在这里吐槽一下百度，对百度真心很反感，百度搜出来的不是广告就是一堆山寨的网站。</p>
+<p>下面来说说如何主动向Google提交申请，让Google收录我们的域名。</p>
+<h3 id="提交站点到Google"><a href="#提交站点到Google" class="headerlink" title="提交站点到Google"></a>提交站点到Google</h3><p>进入<a target="_blank" rel="noopener" href="http://www.google.cn/webmasters/">谷歌网站站长</a>，打开Google Search Console，添加域名/yourname.github.io。</p>
+<p><img src="/../images/SEO-Traffic-Statistics/addDomain-Google-Search-1640023074096.jpg"></p>
+<h3 id="验证站点"><a href="#验证站点" class="headerlink" title="验证站点"></a>验证站点</h3><p>验证站点中农最简单的方法是上传HTML文件，但是一直验证失败。然后我选择采用HTML标记的备用方法，通过校验网页中<head>中的属性来进行校验。首先将给出的元标记复制到hueman主题-&gt;layout-&gt;common的head.ejs文件中，然后提交博客,稍后就可以验证成功了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">	&lt;head&gt;</span><br><span class="line">		&lt;meta name=&quot;google-site-verification&quot; content=&quot;p99TldFVx6r3tvG46TlF21zDyh7e2mT7qTNMO32abTY&quot; /&gt;</span><br><span class="line">	&lt;/head&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="生成站点地图并提交"><a href="#生成站点地图并提交" class="headerlink" title="生成站点地图并提交"></a>生成站点地图并提交</h3><p>我们执行以下命令使用npm自动生成网站的sitemap，然后将生成的sitemap.xml提交到Google搜索引擎。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/SEO-Traffic-Statistics/addSitemap-1640023071801.jpg"></p>
+<h1 id="流量统计"><a href="#流量统计" class="headerlink" title="流量统计"></a>流量统计</h1><p>个人博客建立完成后，我想要查看博客流量情况并且了解文章的阅读量。在此，我采用不蒜子进行统计，这也是最便捷的一种方法。<a target="_blank" rel="noopener" href="https://busuanzi.ibruce.info/">不蒜子</a>是极简的网页计数器，可以对网站访问量pv、访客数uv及文章阅读量pv进行统计并显示。</p>
+<h2 id="博客访问量与访客数"><a href="#博客访问量与访客数" class="headerlink" title="博客访问量与访客数"></a>博客访问量与访客数</h2><p>进入hueman主题-&gt;layout-&gt;common找到网站页脚的配置文件footer.ejs，在想要放置的位置添加以下用于安装busuanzi脚本及显示网站访问量pv、访客数uv的代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;script async src=&quot;//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js&quot;&gt;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;span id=&quot;busuanzi_container_site_pv&quot;&gt;</span><br><span class="line">	本站总访问量&lt;span id=&quot;busuanzi_value_site_pv&quot;&gt;&lt;/span&gt;次</span><br><span class="line">&lt;/span&gt;</span><br><span class="line">&lt;span id=&quot;busuanzi_container_site_uv&quot;&gt;</span><br><span class="line">	本站访客数&lt;span id=&quot;busuanzi_value_site_uv&quot;&gt;&lt;/span&gt;人次</span><br><span class="line">&lt;/span&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="文章阅读量"><a href="#文章阅读量" class="headerlink" title="文章阅读量"></a>文章阅读量</h2><p>进入hueman主题-&gt;layout-&gt;common找到网站页脚的配置文件article.ejs，在想要放置的位置添加以下用于显示文章阅读量pv的代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;span id=&quot;busuanzi_container_page_pv&quot;&gt;</span><br><span class="line">	阅读量&lt;span id=&quot;busuanzi_value_page_pv&quot;&gt;&lt;/span&gt;次</span><br><span class="line">&lt;/span&gt;</span><br></pre></td></tr></table></figure>
       
     </div>
 
