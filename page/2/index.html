@@ -130,7 +130,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">13</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -175,6 +175,251 @@
 
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://lygeneral.github.io/2019/01/20/SEO-Traffic-Statistics/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/EveOneCat.gif">
+      <meta itemprop="name" content="tjliu">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tjliu的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/01/20/SEO-Traffic-Statistics/" class="post-title-link" itemprop="url">网站SEO优化流量统计</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-01-20 10:20:55" itemprop="dateCreated datePublished" datetime="2019-01-20T10:20:55+08:00">2019-01-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-12-26 01:11:36" itemprop="dateModified" datetime="2021-12-26T01:11:36+08:00">2021-12-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">博客</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/../images/SEO-Traffic-Statistics/SEO-logo-1640023076083.jpg"></p>
+<h1 id="SEO优化"><a href="#SEO优化" class="headerlink" title="SEO优化"></a>SEO优化</h1><p>搜索引擎优化（SEO，Search Engine Optimizatio）是一种利用搜索引擎的规则提高网站在有关搜索引擎内的自然排名的方式。</p>
+<h2 id="Google收录网站"><a href="#Google收录网站" class="headerlink" title="Google收录网站"></a>Google收录网站</h2><p>在搜索引擎中输入site:&lt;域名&gt;可以查看该域名是否被搜索引擎收录。想要网站被搜索引擎收录可以主动向搜索提交或者等待一段时间被搜索引擎抓取。网站搭建完成时我在Google里查看域名并未被收录，隔了一个月后在Google中输入site:&lt;域名&gt;竟然能查看到我的域名已经被Google抓取收录。在这里吐槽一下百度，对百度真心很反感，百度搜出来的不是广告就是一堆山寨的网站。</p>
+<p>下面来说说如何主动向Google提交申请，让Google收录我们的域名。</p>
+<h3 id="提交站点到Google"><a href="#提交站点到Google" class="headerlink" title="提交站点到Google"></a>提交站点到Google</h3><p>进入<a target="_blank" rel="noopener" href="http://www.google.cn/webmasters/">谷歌网站站长</a>，打开Google Search Console，添加域名/yourname.github.io。</p>
+<p><img src="/../images/SEO-Traffic-Statistics/addDomain-Google-Search-1640023074096.jpg"></p>
+<h3 id="验证站点"><a href="#验证站点" class="headerlink" title="验证站点"></a>验证站点</h3><p>验证站点中农最简单的方法是上传HTML文件，但是一直验证失败。然后我选择采用HTML标记的备用方法，通过校验网页中<head>中的属性来进行校验。首先将给出的元标记复制到hueman主题-&gt;layout-&gt;common的head.ejs文件中，然后提交博客,稍后就可以验证成功了。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;html&gt;</span><br><span class="line">	&lt;head&gt;</span><br><span class="line">		&lt;meta name=&quot;google-site-verification&quot; content=&quot;p99TldFVx6r3tvG46TlF21zDyh7e2mT7qTNMO32abTY&quot; /&gt;</span><br><span class="line">	&lt;/head&gt;</span><br><span class="line">&lt;/html&gt;</span><br></pre></td></tr></table></figure>
+
+<h3 id="生成站点地图并提交"><a href="#生成站点地图并提交" class="headerlink" title="生成站点地图并提交"></a>生成站点地图并提交</h3><p>我们执行以下命令使用npm自动生成网站的sitemap，然后将生成的sitemap.xml提交到Google搜索引擎。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-generator-sitemap --save</span><br></pre></td></tr></table></figure>
+
+<p><img src="/../images/SEO-Traffic-Statistics/addSitemap-1640023071801.jpg"></p>
+<h1 id="流量统计"><a href="#流量统计" class="headerlink" title="流量统计"></a>流量统计</h1><p>个人博客建立完成后，我想要查看博客流量情况并且了解文章的阅读量。在此，我采用不蒜子进行统计，这也是最便捷的一种方法。<a target="_blank" rel="noopener" href="https://busuanzi.ibruce.info/">不蒜子</a>是极简的网页计数器，可以对网站访问量pv、访客数uv及文章阅读量pv进行统计并显示。</p>
+<h2 id="博客访问量与访客数"><a href="#博客访问量与访客数" class="headerlink" title="博客访问量与访客数"></a>博客访问量与访客数</h2><p>进入hueman主题-&gt;layout-&gt;common找到网站页脚的配置文件footer.ejs，在想要放置的位置添加以下用于安装busuanzi脚本及显示网站访问量pv、访客数uv的代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;script async src=&quot;//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js&quot;&gt;</span><br><span class="line">&lt;/script&gt;</span><br><span class="line">&lt;span id=&quot;busuanzi_container_site_pv&quot;&gt;</span><br><span class="line">	本站总访问量&lt;span id=&quot;busuanzi_value_site_pv&quot;&gt;&lt;/span&gt;次</span><br><span class="line">&lt;/span&gt;</span><br><span class="line">&lt;span id=&quot;busuanzi_container_site_uv&quot;&gt;</span><br><span class="line">	本站访客数&lt;span id=&quot;busuanzi_value_site_uv&quot;&gt;&lt;/span&gt;人次</span><br><span class="line">&lt;/span&gt;</span><br></pre></td></tr></table></figure>
+
+<h2 id="文章阅读量"><a href="#文章阅读量" class="headerlink" title="文章阅读量"></a>文章阅读量</h2><p>进入hueman主题-&gt;layout-&gt;common找到网站页脚的配置文件article.ejs，在想要放置的位置添加以下用于显示文章阅读量pv的代码。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;span id=&quot;busuanzi_container_page_pv&quot;&gt;</span><br><span class="line">	阅读量&lt;span id=&quot;busuanzi_value_page_pv&quot;&gt;&lt;/span&gt;次</span><br><span class="line">&lt;/span&gt;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://lygeneral.github.io/2019/01/04/Hexo-Github-Pages-setupblog/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/EveOneCat.gif">
+      <meta itemprop="name" content="tjliu">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="tjliu的博客">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2019/01/04/Hexo-Github-Pages-setupblog/" class="post-title-link" itemprop="url">Hexo + Github Pages搭建个人博客网站</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2019-01-04 18:33:18" itemprop="dateCreated datePublished" datetime="2019-01-04T18:33:18+08:00">2019-01-04</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2021-12-26 01:11:02" itemprop="dateModified" datetime="2021-12-26T01:11:02+08:00">2021-12-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%8D%9A%E5%AE%A2/" itemprop="url" rel="index"><span itemprop="name">博客</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <p><img src="/../images/Hexo-Github-Pages-setupblog/Github-logo.jpg"></p>
+<p>一直想建立一个自己的网站，却因为各种事情给耽误了。随着学习的深入，我发现在信息爆炸的时代必须要经常总结才能提炼出对自己有用的东西，而且以后能够回顾。但是我又不喜欢受到各种博客平台的限制，就想着自己搭建一个博客网站，不仅可以记录自己的学习状态，而且可以向大家分享一些技术。于是花了几天时间搭建了个人的博客网站。</p>
+<h1 id="1-存储空间"><a href="#1-存储空间" class="headerlink" title="1 存储空间"></a>1 存储空间</h1><p>搭建个人博客网站常采用云服务器/虚拟主机+WordPress和Github Pages+Hexo/jekyll这两种方案。文字、图片、视频等内容存储在云服务器/虚拟主机或者Github Pages上。</p>
+<h2 id="1-1-云服务器-虚拟主机"><a href="#1-1-云服务器-虚拟主机" class="headerlink" title="1.1 云服务器/虚拟主机"></a>1.1 云服务器/虚拟主机</h2><p>学生的话可以考虑阿里云和腾讯云，学生专享价10元/月，几乎打了一折。AWS提供了一年的免费主机，也值得考虑，可以免费试用一年。还有七牛云、老鹰主机和老薛主机等可供选择。</p>
+<h2 id="1-2-Github-Pages"><a href="#1-2-Github-Pages" class="headerlink" title="1.2 Github Pages"></a>1.2 Github Pages</h2><p>由于<a target="_blank" rel="noopener" href="https://help.github.com/articles/what-is-github-pages/">Github</a>提供1GB的免费存储空间，单纯地存储一些文章和图片也已经够用了。同时为了激励自己去使用Github，我选择使用Github Pages搭建个人博客。</p>
+<p>首先注册Github账号，然后新建仓库，和常规新建仓库的操作相同。要注意的是Repository name需要填写yourgithubname.github.io，其中yourgithubname和Github用户名一致。这样Github会默认新建的仓库配置为Github Pages，可以省去后续的配置。然后点击Create repository创建一个仓库。</p>
+<p><img src="/../images/Hexo-Github-Pages-setupblog/new-repository.jpg"></p>
+<p>至此，yourgithubname.github.io可以作为独立的网址进行访问了。只是现在还没有部署博客，不能正确的显示，后续通过Hexo把博客部署于Github Pages上，就可以看到完整的博客了。</p>
+<h1 id="2-Hexo部署Github-Pages"><a href="#2-Hexo部署Github-Pages" class="headerlink" title="2 Hexo部署Github Pages"></a>2 Hexo部署Github Pages</h1><h2 id="2-1-安装Git"><a href="#2-1-安装Git" class="headerlink" title="2.1 安装Git"></a>2.1 安装Git</h2><p>为了方便环境的搭建，从<a target="_blank" rel="noopener" href="https://git-scm.com/">Git官网</a>下载Git并安装。Git的使用方法推荐参考廖雪峰的教程<a target="_blank" rel="noopener" href="https://www.liaoxuefeng.com/">Git中文教程</a>，他的教程都很通俗易懂。安装完成后电脑里会出现Git Bash，Git CMD和Git GUI，我们只使用Git Bash命令行工具即可，所有后续的命令均在Git Bash中执行。</p>
+<h2 id="2-2-安装NodeJS"><a href="#2-2-安装NodeJS" class="headerlink" title="2.2 安装NodeJS"></a>2.2 安装NodeJS</h2><p>Hexo是基于NodeJS环境的静态博客，需要安装NodeJS和里面附带的npm工具。从<a target="_blank" rel="noopener" href="https://nodejs.org/en/">NodeJS官网</a>下载LTS(长期支持版)或Current（当前最新版），然后安装。安装完成后可以执行以下命令检查安装版本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ node -v</span><br><span class="line">$ npm -v</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-3-安装Hexo"><a href="#2-3-安装Hexo" class="headerlink" title="2.3 安装Hexo"></a>2.3 安装Hexo</h2><p>新建一个放博客的文件夹Myblog，右键点击Git Bash Here，进入Git Bash命令行工具。执行以下命令安装Hexo和检查安装的Hexo的版本：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br><span class="line">$ hexo -v</span><br></pre></td></tr></table></figure>
+
+<p>然后执行以下命令初始化Hexo，将Myblog文件夹初始化为一个博客文件夹：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init</span><br></pre></td></tr></table></figure>
+
+<p>初始化完成后该博客会生成一篇hello-world的文章，并且默认使用landscape主题。然后执行以下命令生成博客：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>完成后文件夹内会多出public的文件夹，里面存放的就是用于呈现博客的完整的静态网站。想要开启博客本地的服务器并通过本地访问的话，执行以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>然后打开浏览器输入    localhost:4000就可以访问本地端的博客了。想要访问网页端的博客，需要先对访问Github的方式进行配置，然后将博客部署至Github Pages上。</p>
+<h2 id="2-4-通过SSH访问Github"><a href="#2-4-通过SSH访问Github" class="headerlink" title="2.4 通过SSH访问Github"></a>2.4 通过SSH访问Github</h2><p>因为SSH协议使用公钥认证，可以实现无口令访问，访问Github时不需要输入密码。所以在此通过SSH协议访问Github仓库，进行版本控制。</p>
+<p>首先使用以下命令为本地Git客户端配置Github用户名和邮箱地址：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name &quot;yourname&quot;</span><br><span class="line">$ git config --global user.email &quot;youremail&quot;</span><br></pre></td></tr></table></figure>
+
+<p>然后使用以下命令创建SSH公钥和私钥：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh-keygen -t rsa -C &quot;youremail&quot;</span><br></pre></td></tr></table></figure>
+
+<p>在[C:用户\用户名.ssh]文件夹中会出现id_rsa和id_rsa.pub两个文件，其中id_rsa是电脑的私钥，只能自己拥有，不能外泄。id_rsa.pub是电脑的公钥，是可以向所有人公开的。然后在Github的Settings里点击add deploy key添加部署的密钥，把id_rsa.pub文件内的内容复制粘贴到Key里面去，Title随便填。勾选上Allow weite access后点击Add Key，添加SSH公钥。</p>
+<p><img src="/../images/Hexo-Github-Pages-setupblog/addSSH-Publickey.jpg"></p>
+<p>尝试使用以下命令通过SSH协议访问Github，如果提示Are you sure you want to continue connecting (yes/no)?，输入yes。访问成功则出现successfully authenticated认证成功的字样：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ssh -T git@github.com</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-5-远程部署Github-Pages"><a href="#2-5-远程部署Github-Pages" class="headerlink" title="2.5 远程部署Github Pages"></a>2.5 远程部署Github Pages</h2><p>把Hexo和GitHub关联起来，也就是将Hexo生成的文章部署到GitHub Pages上，打开博客文件夹找到_config.yml，修改文件中deploy字段后的内容，其中yourgithubname与Github的用户名一致：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: git@github.com:yourgithubname/yourgithubname.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<p>使用以下命令安装deploy-git，这样才能部署成功：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
+
+<p>然后执行以下命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo generate</span><br><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+<p>出现Deploy done: git字样说明部署成功，就可以通过访问yourgithubname.github.io访问个人博客了。</p>
+<h1 id="3-域名"><a href="#3-域名" class="headerlink" title="3 域名"></a>3 域名</h1><p>如果觉得yourgithubname.github.io比较low，可以向国内或国外的服务商申请自己的域名并把域名和Github Pages绑定在一起，就可以通过自己的域名访问博客了。如果存储空间购买国外的云服务器/虚拟主机或使用Github Pages的话，可以考虑从国外服务商申请域名，这样就不需要备案，省去一些事。</p>
+<h2 id="3-1-申请域名"><a href="#3-1-申请域名" class="headerlink" title="3.1 申请域名"></a>3.1 申请域名</h2><p>通过国内域名服务商申请域名的话，可以去新网，万网（阿里云旗下）申请。</p>
+<p>国外域名服务商就非常多了，有<a target="_blank" rel="noopener" href="https://sg.godaddy.com/zh">GoDaddy</a>、<a target="_blank" rel="noopener" href="https://www.namesilo.com/">namesilo</a>、namecheap、name等等。很多都支持支付宝付款，购买也很方便。大家可以通过<a target="_blank" rel="noopener" href="https://tld-list.com/">TLD-LIST</a>和<a target="_blank" rel="noopener" href="https://www.domcomp.com/">Domcomp</a>这两个比价网站比较不同服务商域名的价格。</p>
+<p>GoDaddy很受欢迎，许多人都推荐Godaddy，所以一开始我也是准备去GoDaddy申请域名。搜索我想要的域名后看到价格也很满意，就准备注册GoDaddy的账号了。注册GoDaddy的账号需要通过短信或者手机应用程序两步验证，我想通过短信验的方式注册手机却一直收不到短信，然后下载了两步验证工具Authy才注册成功。然后填入网上搜索的优惠码，一年只需要花几块钱，但是GoDaddy需要额外花60元购买隐私保护。而且听说GoDaddy的续费比较高，而namesilo送隐私保护并且续费也很合理，所以我后来选择去namesilo申请域名了。然后搜索它的优惠码并在箭头处输入提交，却发现通通都是减1美元，最后花了6美元申请了域名一年的期限。注意购买的时候选择WHOIS Privacy，可以保护隐私。</p>
+<p><img src="/../images/Hexo-Github-Pages-setupblog/purchaseDomain.jpg"></p>
+<h2 id="3-2-域名解析"><a href="#3-2-域名解析" class="headerlink" title="3.2 域名解析"></a>3.2 域名解析</h2><p>域名解析可以使用申请域名的服务商提供的域名服务器解析域名，但namesilo是国外的域名服务器，博客基本是在国内进行访问。因此，我决定使用比较快而且稳定的第三方DNSPod进行域名解析。在以下使用namesilo和DNSPod解析域名的两种方法中选择一种即可。</p>
+<h3 id="3-2-1-namesilo解析域名"><a href="#3-2-1-namesilo解析域名" class="headerlink" title="3.2.1 namesilo解析域名"></a>3.2.1 namesilo解析域名</h3><p>进入namesilo官网，点击右上角的Manage My Domains，出现申请的域名，然后点击箭头处的Manage DNS for this domain进入域名解析界面。</p>
+<p><img src="/../images/Hexo-Github-Pages-setupblog/namesilo.jpg"></p>
+<p>将所有默认的DNS记录删除，新建TARGET HOSTNAME为yourgithubname.github.io，HOSTNAME分别为@和www的两条CNAME记录。</p>
+<h3 id="3-2-2-DNSPod解析域名"><a href="#3-2-2-DNSPod解析域名" class="headerlink" title="3.2.2 DNSPod解析域名"></a>3.2.2 DNSPod解析域名</h3><p>首先注册DNSPod账号，进入域名解析。添加域名,点击确定后，等待大概几分钟，NS域名服务器修改完成。</p>
+<p><img src="/../images/Hexo-Github-Pages-setupblog/addDNSdomain.jpg"></p>
+<p>然后进入域名，添加记录。和namesilo一样，添加记录值为yourgithubname.github.io，主机记录为@和www的两条CNAME记录，并不需要采取[ping yourgithubname.github.io]获取IP然后添加IP的A记录的方式。由于yourgithubname.github.io是国外的网站，因此等待全球DNS解析完成才能正常访问，需要耐心等待一段时间。</p>
+<p><img src="/../images/Hexo-Github-Pages-setupblog/addDNSrecord.jpg"></p>
+<p>然后要在namesilo管理的域名中点击箭头处的Change Nameservers：</p>
+<p><img src="/../images/Hexo-Github-Pages-setupblog/openchgNameservers.jpg"></p>
+<p>然后把域名服务器更改为f1g1ns1.dnspod.net和f1g1ns2.dnspod.net：</p>
+<p><img src="/../images/Hexo-Github-Pages-setupblog/changeNameservers.jpg"></p>
+<h2 id="3-3-Github-Pages绑定个人域名"><a href="#3-3-Github-Pages绑定个人域名" class="headerlink" title="3.3 Github Pages绑定个人域名"></a>3.3 Github Pages绑定个人域名</h2><p>前面DNSPod解析域名已经将个人域名指向yourgithubname.github.io。然后将Github Pages与个人域名绑定在一起。打开Github仓库进入Setting是界面，找到Github Pages，在Custom domain里面填入个人域名。如果想通过HTTPS访问博客的话，可以勾选上Enforce HTTPS。</p>
+<p><img src="/../images/Hexo-Github-Pages-setupblog/bindGithub-Domain.jpg"></p>
+<p>刚开始上图可能会显示Domain’s DNS record could not be retrieved警告，等上一段时间后终于正常的显示Your site is published。至此，就可以愉快地通过访问独立域名来访问个人博客网站了。</p>
+<p><strong>Reference</strong></p>
+<p><a target="_blank" rel="noopener" href="http://fangzh.top/">Fangzh的博客</a></p>
+<p><a target="_blank" rel="noopener" href="http://visugar.com/">visugar的博客</a></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -279,7 +524,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2021</span>
+  <span itemprop="copyrightYear">2023</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
