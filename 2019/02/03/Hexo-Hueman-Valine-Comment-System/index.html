@@ -20,12 +20,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/animate.css@3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"lygeneral.github.io","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.8.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":false,"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
-<meta name="description" content="Hexo的评论系统有很多，常见的有多说、网易云跟帖、畅言、来必力（LiveRe）、Disqus、Hypercomments和Valine，其中多说和网易云已经失效，畅言需要备案，LiveRe加载速度慢。在此，我选择Valine作为博客的评论系统。Valine的详细介绍和使用方法见Valine官网。 LeanCloud配置首先在LeanCloud官网注册账号，然后进入控制台，创建应用。  然后进入">
+<meta name="description" content="Hexo的评论系统有很多，常见的有多说、网易云跟帖、畅言、来必力（LiveRe）、Disqus、Hypercomments和Valine，其中多说和网易云已经失效，畅言需要备案，LiveRe加载速度慢。在此，我选择Valine作为博客的评论系统。Valine的详细介绍和使用方法见Valine官网。 LeanCloud配置 首先在LeanCloud官网注册账号，然后进入控制台，创建应用。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hueman添加Valine评论系统">
 <meta property="og:url" content="https://lygeneral.github.io/2019/02/03/Hexo-Hueman-Valine-Comment-System/index.html">
 <meta property="og:site_name" content="tjliu的博客">
-<meta property="og:description" content="Hexo的评论系统有很多，常见的有多说、网易云跟帖、畅言、来必力（LiveRe）、Disqus、Hypercomments和Valine，其中多说和网易云已经失效，畅言需要备案，LiveRe加载速度慢。在此，我选择Valine作为博客的评论系统。Valine的详细介绍和使用方法见Valine官网。 LeanCloud配置首先在LeanCloud官网注册账号，然后进入控制台，创建应用。  然后进入">
+<meta property="og:description" content="Hexo的评论系统有很多，常见的有多说、网易云跟帖、畅言、来必力（LiveRe）、Disqus、Hypercomments和Valine，其中多说和网易云已经失效，畅言需要备案，LiveRe加载速度慢。在此，我选择Valine作为博客的评论系统。Valine的详细介绍和使用方法见Valine官网。 LeanCloud配置 首先在LeanCloud官网注册账号，然后进入控制台，创建应用。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://lygeneral.github.io/2019/02/03/images/Hexo-Hueman-Valine-Comment-System/Comment-logo-1640023047247.jpg">
 <meta property="og:image" content="https://lygeneral.github.io/2019/02/03/images/Hexo-Hueman-Valine-Comment-System/creatApplication-1640023049274.jpg">
@@ -130,7 +130,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#LeanCloud%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">LeanCloud配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Hueman%E8%BF%9B%E8%A1%8C%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">Hueman进行配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%84%E8%AE%BA%E7%AE%A1%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">评论管理</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#leancloud%E9%85%8D%E7%BD%AE"><span class="nav-number">1.</span> <span class="nav-text">LeanCloud配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#hueman%E8%BF%9B%E8%A1%8C%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">Hueman进行配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%84%E8%AE%BA%E7%AE%A1%E7%90%86"><span class="nav-number">3.</span> <span class="nav-text">评论管理</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -253,20 +253,23 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <p><img src="../images/Hexo-Hueman-Valine-Comment-System/Comment-logo-1640023047247.jpg" alt=""></p>
+        <p><img src="../images/Hexo-Hueman-Valine-Comment-System/Comment-logo-1640023047247.jpg" /></p>
 <p>Hexo的评论系统有很多，常见的有多说、网易云跟帖、畅言、来必力（LiveRe）、Disqus、Hypercomments和Valine，其中多说和网易云已经失效，畅言需要备案，LiveRe加载速度慢。在此，我选择Valine作为博客的评论系统。Valine的详细介绍和使用方法见<a target="_blank" rel="noopener" href="https://valine.js.org">Valine官网</a>。</p>
-<h2 id="LeanCloud配置"><a href="#LeanCloud配置" class="headerlink" title="LeanCloud配置"></a>LeanCloud配置</h2><p>首先在<a target="_blank" rel="noopener" href="https://leancloud.cn">LeanCloud官网</a>注册账号，然后进入控制台，创建应用。</p>
-<p><img src="../images/Hexo-Hueman-Valine-Comment-System/creatApplication-1640023049274.jpg" alt=""></p>
+<h2 id="leancloud配置">LeanCloud配置</h2>
+<p>首先在<a target="_blank" rel="noopener" href="https://leancloud.cn">LeanCloud官网</a>注册账号，然后进入控制台，创建应用。</p>
+<p><img src="../images/Hexo-Hueman-Valine-Comment-System/creatApplication-1640023049274.jpg" /></p>
 <p>然后进入应用后，获取App ID和App Key，后面对Hueman主题进行配置时需要使用。</p>
-<p><img src="../images/Hexo-Hueman-Valine-Comment-System/appID-Key-1640023050815.jpg" alt=""></p>
+<p><img src="../images/Hexo-Hueman-Valine-Comment-System/appID-Key-1640023050815.jpg" /></p>
 <p>为了提高数据的安全性绑定域名，进入安全中心在Web安全域名填入域名。</p>
-<p><img src="../images/Hexo-Hueman-Valine-Comment-System/SecureDomain-1640023052398.jpg" alt=""></p>
-<h2 id="Hueman进行配置"><a href="#Hueman进行配置" class="headerlink" title="Hueman进行配置"></a>Hueman进行配置</h2><p>由于Hueman主题提供Valine评论系统的接口，配置Valine评论系统的过程非常简单。在Hueman主题的配置文件_config.yml中找到comment区域，并使用以下参数对valine进行配置，在appId和appKey中分别填入LeanCloud应用中的App ID和App Key。</p>
+<p><img src="../images/Hexo-Hueman-Valine-Comment-System/SecureDomain-1640023052398.jpg" /></p>
+<h2 id="hueman进行配置">Hueman进行配置</h2>
+<p>由于Hueman主题提供Valine评论系统的接口，配置Valine评论系统的过程非常简单。在Hueman主题的配置文件_config.yml中找到comment区域，并使用以下参数对valine进行配置，在appId和appKey中分别填入LeanCloud应用中的App ID和App Key。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">valine: # Valine Comment System https://github.com/xCss/Valine</span><br><span class="line">    on: true # enter true to enable valine</span><br><span class="line">    appId: # enter the leancloud application appId here</span><br><span class="line">    appKey: # enter the leancloud application appKey here</span><br><span class="line">    notify: false # enter true to enable &lt;Mail notifier&gt; https://github.com/xCss/Valine/wiki/Valine-%E8%AF%84%E8%AE%BA%E7%B3%BB%E7%BB%9F%E4%B8%AD%E7%9A%84%E9%82%AE%E4%BB%B6%E6%8F%90%E9%86%92%E8%AE%BE%E7%BD%AE</span><br><span class="line">    verify: false # enter true to enable &lt;Validation code&gt;</span><br><span class="line">    placeholder: 撰写评论 # enter the comment box placeholder</span><br><span class="line">    avatar: wavatar # (&#x27;&#x27;/mm/identicon/monsterid/wavatar/retro/hide), more to see https://valine.js.org/avatar/</span><br><span class="line">    avatar_cdn: https://gravatar.loli.net/avatar/ # avatar CDN address, default gravatar.loli.net</span><br><span class="line">    pageSize: 10 # comments of one page</span><br></pre></td></tr></table></figure>
 <p><strong>注意</strong>：在添加Valine作为评论系统时，需要将其他几种评论系统删除。由于Hueman主题中comment部分默认使用disqus评论系统，导致我如何设置都不能正常显示Valine，折腾了很久。把disqus后的hexo-theme-hueman删除后，Valine评论系统终于能够正常工作。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">comment:</span><br><span class="line">    disqus: hexo-theme-hueman # enter disqus shortname here</span><br></pre></td></tr></table></figure>
-<h2 id="评论管理"><a href="#评论管理" class="headerlink" title="评论管理"></a>评论管理</h2><p>对博客中的文章进行评论后，进入LeanCloud的控制台中，在存储中找到Class Comment对评论进行管理。</p>
-<p><img src="../images/Hexo-Hueman-Valine-Comment-System/CommentManagement-1640023055306.jpg" alt=""></p>
+<h2 id="评论管理">评论管理</h2>
+<p>对博客中的文章进行评论后，进入LeanCloud的控制台中，在存储中找到Class Comment对评论进行管理。</p>
+<p><img src="../images/Hexo-Hueman-Valine-Comment-System/CommentManagement-1640023055306.jpg" /></p>
 <p><strong>Reference</strong></p>
 <p><a target="_blank" rel="noopener" href="https://qdhaiqiang.github.io">马海强的博客</a></p>
 
